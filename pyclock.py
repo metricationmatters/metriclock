@@ -2,33 +2,35 @@
 import turtle
 import time
 
-def Draw_Clock( hourr_, minutee_, secondd_, t_ ):
+def Draw_Clock( color_, radius_, hour_divisions_, hour_, minute_, second_, t_ ):
 #{
+    # Draw clock
     t_.up( )  # not ready to draw
     t_.goto( 0, 210 )  # positioning the turtle
     t_.setheading( 180 )   # setting the heading to 180
-    t_.color( "red" )  # setting the color of the pen to red
+    t_.color( color_ )  # setting the color of the pen.
     t_.pendown( )     # starting to draw
-    t_.circle( 210 )    # a circle with the radius 210
+    t_.circle( radius_ )    # a circle with the radius.
 
     t_.up( )  # not ready to draw
     t_.goto( 0, 0 )    # positioning the turtle
     t_.setheading( 90 )    # same as seth(90) in newer version
 
-    for z in range( 24 ):     # loop
+    for z in range( hour_divisions_ ):     # loop
     #{
         t_.fd( 190 )   # moving forward at 190 units
         t_.pendown( )     # starting to draw
         t_.fd( 20 )    # forward at 20
         t_.penup( )   # not ready to draw
         t_.goto( 0, 0 )    # positioning the turtle
-        t_.rt( 15 )    # right at an angle of 15 degrees
+        t_.rt( 360 / hour_divisions_ )    # right at an angle of 15 degrees
     #}
 
-    hands = [ ( "black",  80, 24 ),
-              ( "black", 150, 60 ),
-              ( "black", 110, 60 ) ]     # the color and the hands set
-    time_set = ( hourr_, minutee_, secondd_ )  # setting the time
+    hands = [ ( color_,  80, 24 ),
+              ( color_, 150, 60 ),
+              ( color_, 110, 60 ) ]     # the color and the hands set
+    
+    time_set = ( hour_, minute_, second_ )  # setting the time
 
     for hand in hands:
     #{
@@ -59,13 +61,25 @@ def main( ):
 
     while True:
     #{
-        hourr   = int( time.strftime( "%H" ) )
-        minutee = int( time.strftime( "%M" ) )
-        secondd = int( time.strftime( "%S" ) )
+        hour   = int( time.strftime( "%H" ) )
+        minute = int( time.strftime( "%M" ) )
+        second = int( time.strftime( "%S" ) )
 
-        print( f"Hour={hourr}, Minute={minutee}, Second={secondd}" )
+        metric_time = hour * 60 * 60 + minute * 60 + second
 
-        Draw_Clock( hourr, minutee, secondd, t )
+        metric_hour   = metric_time / 1000
+        metric_minute = metric_time % 1000
+        metric_second = metric_time % 60
+
+        print( f"Normal Hour={hour}, Minute={minute}, Second={second}" )
+        print( f"Metric Hour={metric_hour}, Minute={metric_minute}, Second={metric_second}" )
+        print( f"TotalDaySeconds={metric_time}, MetricTime%={metric_time / 86400 }" )
+        print( "" )
+
+        Draw_Clock( "red", 210, 24, hour, minute, second, t )
+
+        # Draw_Clock( "green", 250, 1000, metric_hour, metric_minute, metric_second, t )
+
         screen.update( )     # updating the screen
         time.sleep( 1 )
         t.clear( )
