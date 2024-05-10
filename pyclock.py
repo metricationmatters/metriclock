@@ -76,12 +76,20 @@ def main( ):
 
     metric_color = "green"
     
+    # 86400 seconds is 2^7 * 3^3 * 5^2
+
     metric_hands = [ ( metric_color,  80,  10 ),
                      ( metric_color, 150,  10 ),
                      ( metric_color, 110, 864 ) ]     # the color and the hands set
 
     metric_seconds_per_hour   = metric_hands[ 1 ][ 2 ] * metric_hands[ 2 ][ 2 ]
     metric_seconds_per_minute = metric_hands[ 2 ][ 2 ]
+
+    # legacy_seconds_per_metric_second = 1.157407407407407407407
+
+    # total_metric_seconds_per_day = 60 * 60 * 24 * legacy_seconds_per_metric_second
+
+    # print( f"Total Metric Seconds per day = {total_metric_seconds_per_day}" )
 
     legacy = Time( 0, 0, 0 )
     normal = Time( 0, 0, 0 )
@@ -99,7 +107,6 @@ def main( ):
         normal.minute = int( ( total_seconds - normal_seconds_per_hour * normal.hour ) / normal_seconds_per_minute )
         normal.second = total_seconds - normal_seconds_per_hour * normal.hour - normal_seconds_per_minute * normal.minute
 
-
         metric.hour   = int( total_seconds / metric_seconds_per_hour )
         metric.minute = int( ( total_seconds - metric_seconds_per_hour * metric.hour ) / metric_seconds_per_minute )
         metric.second = total_seconds - metric_seconds_per_hour * metric.hour - metric_seconds_per_minute * metric.minute
@@ -111,12 +118,6 @@ def main( ):
         print( "" )
 
         Draw_Clock( legacy_color, 210, 24, legacy_hands, normal, t )
-
-        metric_color = "green"
-
-        metric_hands = [ ( metric_color,  80, 24 ),
-                         ( metric_color, 150, 60 ),
-                         ( metric_color, 110, 60 ) ]     # the color and the hands set
 
         # Draw_Clock( metric_color, 250, 1000, metric_hands, metric_hour, metric_minute, metric_second, t )
 
