@@ -61,15 +61,20 @@ def main( ):
         minute = int( time.strftime( "%M" ) )
         second = int( time.strftime( "%S" ) )
 
-        metric_time = hour * 60 * 60 + minute * 60 + second
+        total_seconds = hour * 3600 + minute * 60 + second
 
-        metric_hour   = metric_time / 1000
-        metric_minute = metric_time % 1000
-        metric_second = metric_time % 60
+        normal_hour   = int( total_seconds / 3600 )
+        normal_minute = int( ( total_seconds - 3600 * normal_hour ) / 60 )
+        normal_second = total_seconds - 3600 * normal_hour - 60 * normal_minute
 
-        print( f"Normal Hour={hour}, Minute={minute}, Second={second}" )
+        metric_hour   = total_seconds / 1000
+        metric_minute = total_seconds % 1000
+        metric_second = total_seconds % 60
+
+        print( f"Old    Hour={hour}, Minute={minute}, Second={second}" )
+        print( f"Normal Hour={normal_hour}, Minute={normal_minute}, Second={normal_second}" )
         print( f"Metric Hour={metric_hour}, Minute={metric_minute}, Second={metric_second}" )
-        print( f"TotalDaySeconds={metric_time}, MetricTime%={metric_time / 86400 }" )
+        print( f"TotalSeconds={total_seconds}, PercentDat%={total_seconds / 86400 }" )
         print( "" )
 
         normal_color = "red"
@@ -78,7 +83,7 @@ def main( ):
                          ( normal_color, 150, 60 ),
                          ( normal_color, 110, 60 ) ]     # the color and the hands set
 
-        Draw_Clock( normal_color, 210, 24, normal_hands, hour, minute, second, t )
+        Draw_Clock( normal_color, 210, 24, normal_hands, normal_hour, normal_minute, normal_second, t )
 
         metric_color = "green"
 
