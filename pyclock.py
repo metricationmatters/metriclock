@@ -65,14 +65,14 @@ def main( ):
     t.speed( 0 )  # Setting the speed to 0
     t.pensize( 3 )    # Setting the pensize to 3
 
-    normal_color = "red"
+    legacy_color = "red"
 
-    normal_hands = [ ( normal_color,  80, 24 ),
-                     ( normal_color, 150, 60 ),
-                     ( normal_color, 110, 60 ) ]     # the color and the hands set
+    legacy_hands = [ ( legacy_color,  80, 24 ),
+                     ( legacy_color, 150, 60 ),
+                     ( legacy_color, 110, 60 ) ]     # the color and the hands set
 
-    normal_seconds_per_hour = normal_hands[ 1 ][ 2 ] * normal_hands[ 2 ][ 2 ]
-    normal_seconds_per_minute = normal_hands[ 2 ][ 2 ]
+    normal_seconds_per_hour   = legacy_hands[ 1 ][ 2 ] * legacy_hands[ 2 ][ 2 ]
+    normal_seconds_per_minute = legacy_hands[ 2 ][ 2 ]
 
     metric_color = "green"
     
@@ -83,17 +83,17 @@ def main( ):
     metric_seconds_per_hour   = metric_hands[ 1 ][ 2 ] * metric_hands[ 2 ][ 2 ]
     metric_seconds_per_minute = metric_hands[ 2 ][ 2 ]
 
-    old = Time( 0, 0, 0 )
+    legacy = Time( 0, 0, 0 )
     normal = Time( 0, 0, 0 )
     metric = Time( 0, 0, 0 )
 
     while True:
     #{
-        old.hour   = int( time.strftime( "%H" ) )
-        old.minute = int( time.strftime( "%M" ) )
-        old.second = int( time.strftime( "%S" ) )
+        legacy.hour   = int( time.strftime( "%H" ) )
+        legacy.minute = int( time.strftime( "%M" ) )
+        legacy.second = int( time.strftime( "%S" ) )
 
-        total_seconds = old.hour * 3600 + old.minute * 60 + old.second
+        total_seconds = legacy.hour * 3600 + legacy.minute * 60 + legacy.second
 
         normal.hour   = int( total_seconds / normal_seconds_per_hour )
         normal.minute = int( ( total_seconds - normal_seconds_per_hour * normal.hour ) / normal_seconds_per_minute )
@@ -104,13 +104,13 @@ def main( ):
         metric.minute = int( ( total_seconds - metric_seconds_per_hour * metric.hour ) / metric_seconds_per_minute )
         metric.second = total_seconds - metric_seconds_per_hour * metric.hour - metric_seconds_per_minute * metric.minute
 
-        print( f"Old    Hour={old.hour}, Minute={old.minute}, Second={old.second}" )
+        print( f"Legacy Hour={legacy.hour}, Minute={legacy.minute}, Second={legacy.second}" )
         print( f"Normal Hour={normal.hour}, Minute={normal.minute}, Second={normal.second}" )
         print( f"Metric Hour={metric.hour}, Minute={metric.minute}, Second={metric.second}" )
         print( f"TotalSeconds={total_seconds}, PercentDay%={total_seconds / 86400 }" )
         print( "" )
 
-        Draw_Clock( normal_color, 210, 24, normal_hands, normal, t )
+        Draw_Clock( legacy_color, 210, 24, legacy_hands, normal, t )
 
         metric_color = "green"
 
