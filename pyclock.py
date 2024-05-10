@@ -67,14 +67,14 @@ def main( ):
         normal_minute = int( ( total_seconds - 3600 * normal_hour ) / 60 )
         normal_second = total_seconds - 3600 * normal_hour - 60 * normal_minute
 
-        metric_hour   = total_seconds / 1000
-        metric_minute = total_seconds % 1000
-        metric_second = total_seconds % 60
+        metric_hour   = int( total_seconds / 1000 )
+        metric_minute = int( ( total_seconds - 1000 * metric_hour ) / 100 )
+        metric_second = total_seconds - 1000 * metric_hour - 100 * metric_minute
 
         print( f"Old    Hour={hour}, Minute={minute}, Second={second}" )
         print( f"Normal Hour={normal_hour}, Minute={normal_minute}, Second={normal_second}" )
         print( f"Metric Hour={metric_hour}, Minute={metric_minute}, Second={metric_second}" )
-        print( f"TotalSeconds={total_seconds}, PercentDat%={total_seconds / 86400 }" )
+        print( f"TotalSeconds={total_seconds}, PercentDay%={total_seconds / 86400 }" )
         print( "" )
 
         normal_color = "red"
