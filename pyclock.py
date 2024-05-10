@@ -55,6 +55,24 @@ def main( ):
     t.speed( 0 )  # Setting the speed to 0
     t.pensize( 3 )    # Setting the pensize to 3
 
+    normal_color = "red"
+
+    normal_hands = [ ( normal_color,  80, 24 ),
+                     ( normal_color, 150, 60 ),
+                     ( normal_color, 110, 60 ) ]     # the color and the hands set
+
+    normal_seconds_per_hour = normal_hands[ 1 ][ 2 ] * normal_hands[ 2 ][ 2 ]
+    normal_seconds_per_minute = normal_hands[ 2 ][ 2 ]
+
+    metric_color = "green"
+    
+    metric_hands = [ ( metric_color,  80,  10 ),
+                     ( metric_color, 150,  10 ),
+                     ( metric_color, 110, 864 ) ]     # the color and the hands set
+
+    metric_seconds_per_hour   = metric_hands[ 1 ][ 2 ] * metric_hands[ 2 ][ 2 ]
+    metric_seconds_per_minute = metric_hands[ 2 ][ 2 ]
+
     while True:
     #{
         hour   = int( time.strftime( "%H" ) )
@@ -63,25 +81,20 @@ def main( ):
 
         total_seconds = hour * 3600 + minute * 60 + second
 
-        normal_hour   = int( total_seconds / 3600 )
-        normal_minute = int( ( total_seconds - 3600 * normal_hour ) / 60 )
-        normal_second = total_seconds - 3600 * normal_hour - 60 * normal_minute
+        normal_hour   = int( total_seconds / normal_seconds_per_hour )
+        normal_minute = int( ( total_seconds - normal_seconds_per_hour * normal_hour ) / normal_seconds_per_minute )
+        normal_second = total_seconds - normal_seconds_per_hour * normal_hour - normal_seconds_per_minute * normal_minute
 
-        metric_hour   = int( total_seconds / 1000 )
-        metric_minute = int( ( total_seconds - 1000 * metric_hour ) / 100 )
-        metric_second = total_seconds - 1000 * metric_hour - 100 * metric_minute
+
+        metric_hour   = int( total_seconds / metric_seconds_per_hour )
+        metric_minute = int( ( total_seconds - metric_seconds_per_hour * metric_hour ) / metric_seconds_per_minute )
+        metric_second = total_seconds - metric_seconds_per_hour * metric_hour - metric_seconds_per_minute * metric_minute
 
         print( f"Old    Hour={hour}, Minute={minute}, Second={second}" )
         print( f"Normal Hour={normal_hour}, Minute={normal_minute}, Second={normal_second}" )
         print( f"Metric Hour={metric_hour}, Minute={metric_minute}, Second={metric_second}" )
         print( f"TotalSeconds={total_seconds}, PercentDay%={total_seconds / 86400 }" )
         print( "" )
-
-        normal_color = "red"
-
-        normal_hands = [ ( normal_color,  80, 24 ),
-                         ( normal_color, 150, 60 ),
-                         ( normal_color, 110, 60 ) ]     # the color and the hands set
 
         Draw_Clock( normal_color, 210, 24, normal_hands, normal_hour, normal_minute, normal_second, t )
 
