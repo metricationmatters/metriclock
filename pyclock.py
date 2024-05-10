@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import turtle
 import time
 
