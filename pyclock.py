@@ -2,7 +2,17 @@
 import turtle
 import time
 
-def Draw_Clock( color_, radius_, hour_divisions_, hands_, hour_, minute_, second_, t_ ):
+class Time:
+#{
+    def __init__( self, hour_ : int, minute_: int, second_: int ) -> None:
+    #{
+        self.hour   = hour_
+        self.minute = minute_
+        self.second = second_
+    #}
+#}
+
+def Draw_Clock( color_ : str, radius_ : float, hour_divisions_ : int, hands_, current_time_ : Time, t_ ):
 #{
     # Draw clock
     t_.up( )  # not ready to draw
@@ -26,7 +36,7 @@ def Draw_Clock( color_, radius_, hour_divisions_, hands_, hour_, minute_, second
         t_.rt( 360 / hour_divisions_ )    # right at an angle of 15 degrees
     #}
     
-    time_set = ( hour_, minute_, second_ )  # setting the time
+    time_set = ( current_time_.hour, current_time_.minute, current_time_.second )  # setting the time
 
     for hand in hands_:
     #{
@@ -73,30 +83,34 @@ def main( ):
     metric_seconds_per_hour   = metric_hands[ 1 ][ 2 ] * metric_hands[ 2 ][ 2 ]
     metric_seconds_per_minute = metric_hands[ 2 ][ 2 ]
 
+    old = Time( 0, 0, 0 )
+    normal = Time( 0, 0, 0 )
+    metric = Time( 0, 0, 0 )
+
     while True:
     #{
-        hour   = int( time.strftime( "%H" ) )
-        minute = int( time.strftime( "%M" ) )
-        second = int( time.strftime( "%S" ) )
+        old.hour   = int( time.strftime( "%H" ) )
+        old.minute = int( time.strftime( "%M" ) )
+        old.second = int( time.strftime( "%S" ) )
 
-        total_seconds = hour * 3600 + minute * 60 + second
+        total_seconds = old.hour * 3600 + old.minute * 60 + old.second
 
-        normal_hour   = int( total_seconds / normal_seconds_per_hour )
-        normal_minute = int( ( total_seconds - normal_seconds_per_hour * normal_hour ) / normal_seconds_per_minute )
-        normal_second = total_seconds - normal_seconds_per_hour * normal_hour - normal_seconds_per_minute * normal_minute
+        normal.hour   = int( total_seconds / normal_seconds_per_hour )
+        normal.minute = int( ( total_seconds - normal_seconds_per_hour * normal.hour ) / normal_seconds_per_minute )
+        normal.second = total_seconds - normal_seconds_per_hour * normal.hour - normal_seconds_per_minute * normal.minute
 
 
-        metric_hour   = int( total_seconds / metric_seconds_per_hour )
-        metric_minute = int( ( total_seconds - metric_seconds_per_hour * metric_hour ) / metric_seconds_per_minute )
-        metric_second = total_seconds - metric_seconds_per_hour * metric_hour - metric_seconds_per_minute * metric_minute
+        metric.hour   = int( total_seconds / metric_seconds_per_hour )
+        metric.minute = int( ( total_seconds - metric_seconds_per_hour * metric.hour ) / metric_seconds_per_minute )
+        metric.second = total_seconds - metric_seconds_per_hour * metric.hour - metric_seconds_per_minute * metric.minute
 
-        print( f"Old    Hour={hour}, Minute={minute}, Second={second}" )
-        print( f"Normal Hour={normal_hour}, Minute={normal_minute}, Second={normal_second}" )
-        print( f"Metric Hour={metric_hour}, Minute={metric_minute}, Second={metric_second}" )
+        print( f"Old    Hour={old.hour}, Minute={old.minute}, Second={old.second}" )
+        print( f"Normal Hour={normal.hour}, Minute={normal.minute}, Second={normal.second}" )
+        print( f"Metric Hour={metric.hour}, Minute={metric.minute}, Second={metric.second}" )
         print( f"TotalSeconds={total_seconds}, PercentDay%={total_seconds / 86400 }" )
         print( "" )
 
-        Draw_Clock( normal_color, 210, 24, normal_hands, normal_hour, normal_minute, normal_second, t )
+        Draw_Clock( normal_color, 210, 24, normal_hands, normal, t )
 
         metric_color = "green"
 
