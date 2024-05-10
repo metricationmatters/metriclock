@@ -27,15 +27,15 @@ def Draw_Clock(hourr, minutee, secondd, t):
     t.goto(0, 0)    # positioning the turtle
     t.setheading(90)    # same as seth(90) in newer version
 
-    for z in range(12):     # loop
+    for z in range(24):     # loop
         t.fd(190)   # moving forward at 190 units
         t.pendown()     # starting to draw
         t.fd(20)    # forward at 20
         t.penup()   # not ready to draw
         t.goto(0, 0)    # positioning the turtle
-        t.rt(30)    # right at an angle of 30 degrees
+        t.rt(15)    # right at an angle of 15 degrees
 
-    hands = [("black", 80, 12), ("black", 150, 60), ("black", 110, 60)]     # the color and the hands set
+    hands = [("black", 80, 24), ("black", 150, 60), ("black", 110, 60)]     # the color and the hands set
     time_set = (hourr, minutee, secondd)  # setting the time
 
     for hand in hands:
@@ -51,10 +51,11 @@ def Draw_Clock(hourr, minutee, secondd, t):
 
 
 while True:
-    hourr = int(time.strftime("%I"))
+    hourr = int(time.strftime("%H"))
     minutee = int(time.strftime("%M"))
     secondd = int(time.strftime("%S"))
 
+    print( f"Hour={hourr}, Minute={minutee}, Second={secondd}" )
     Draw_Clock(hourr, minutee, secondd, t)
     screen.update()     # updating the screen
     time.sleep(1)
