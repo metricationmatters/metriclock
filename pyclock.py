@@ -2,7 +2,7 @@
 import turtle
 import time
 
-def Draw_Clock( color_, radius_, hour_divisions_, hour_, minute_, second_, t_ ):
+def Draw_Clock( color_, radius_, hour_divisions_, hands_, hour_, minute_, second_, t_ ):
 #{
     # Draw clock
     t_.up( )  # not ready to draw
@@ -25,16 +25,12 @@ def Draw_Clock( color_, radius_, hour_divisions_, hour_, minute_, second_, t_ ):
         t_.goto( 0, 0 )    # positioning the turtle
         t_.rt( 360 / hour_divisions_ )    # right at an angle of 15 degrees
     #}
-
-    hands = [ ( color_,  80, 24 ),
-              ( color_, 150, 60 ),
-              ( color_, 110, 60 ) ]     # the color and the hands set
     
     time_set = ( hour_, minute_, second_ )  # setting the time
 
-    for hand in hands:
+    for hand in hands_:
     #{
-        time_part = time_set[ hands.index( hand )]
+        time_part = time_set[ hands_.index( hand )]
         angle = ( time_part / hand[ 2 ] ) * 360     # setting the angle for the clock
         t_.penup( )   # not ready to draw
         t_.goto( 0, 0 )    # positioning the turtle
@@ -76,9 +72,21 @@ def main( ):
         print( f"TotalDaySeconds={metric_time}, MetricTime%={metric_time / 86400 }" )
         print( "" )
 
-        Draw_Clock( "red", 210, 24, hour, minute, second, t )
+        normal_color = "red"
 
-        # Draw_Clock( "green", 250, 1000, metric_hour, metric_minute, metric_second, t )
+        normal_hands = [ ( normal_color,  80, 24 ),
+                         ( normal_color, 150, 60 ),
+                         ( normal_color, 110, 60 ) ]     # the color and the hands set
+
+        Draw_Clock( normal_color, 210, 24, normal_hands, hour, minute, second, t )
+
+        metric_color = "green"
+
+        metric_hands = [ ( metric_color,  80, 24 ),
+                         ( metric_color, 150, 60 ),
+                         ( metric_color, 110, 60 ) ]     # the color and the hands set
+
+        # Draw_Clock( metric_color, 250, 1000, metric_hands, metric_hour, metric_minute, metric_second, t )
 
         screen.update( )     # updating the screen
         time.sleep( 1 )
