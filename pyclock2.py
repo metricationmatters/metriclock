@@ -275,19 +275,18 @@ class AnalogClock(tk.Canvas):
     def __assign_clock_face_style( self, i, x, y ):
     #{
         #####   Some constants   #####
-        TICKS = { 1: '', 2: '', 3: '―', 4: '', 5: '', 6: '|', 7: '', 8: '', 9: '―', 10: '', 11: '', 12: '|'}
-        EMPTY = { 1: '', 2: '', 3: '',  4: '', 5: '', 6: '',  7: '', 8: '', 9: '',  10: '', 11: '', 12: '' }
+        TICKS = { 1: '', 2: '', 3: '/', 4: '', 5: '', 6: '-', 7: '', 8: '', 9: '\\', 10: '', 11: '', 12: '|', 13: '', 14: '', 15: '/', 16: '', 17: '', 18: '-', 19: '', 20: '', 21: '\\', 22: '', 23: '', 24: '|' }
         if ( self.clock_face_style == 'digit' or self.clock_face_style == 'DIGIT' or self.clock_face_style == 'Digit' ):
         #{
             self.create_text( x, y, text = str( i ), font = self.font, fill = self.font_color )
         #}
         elif ( self.clock_face_style == 'tick' or self.clock_face_style == 'TICK' or self.clock_face_style == 'Tick' ):
         #{
-            self.create_text( x, y, text=TICKS[ i ], font = self.font, fill = self.font_color )
+            self.create_text( x, y, text = TICKS[ i ], font = self.font, fill = self.font_color )
         #}
         elif ( self.clock_face_style == None or self.clock_face_style == 'none' or self.clock_face_style == 'None' or self.clock_face_style == 'NONE' ):
         #{
-            self.create_text( x, y, text = EMPTY[ i ], font = self.font, fill = self.font_color )
+            self.create_text( x, y, text = '', font = self.font, fill = self.font_color )
         #}
     #}
 
