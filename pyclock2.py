@@ -22,7 +22,7 @@ class Time:
         self.second = second
 
         self.total_seconds = 0
-        
+
         self.seconds_factor = seconds_per_day / 86400
 
         self.seconds_per_day = seconds_per_day
@@ -34,6 +34,11 @@ class Time:
         self.seconds_per_hour = self.minutes_per_hour * self.seconds_per_minute
 
         assert self.seconds_per_day == self.hours_per_day * self.minutes_per_hour * self.seconds_per_minute
+    #}
+
+    def __str__( self ) -> str:
+    #{
+        return str( self.hour ) + ":" + str( self.minute ) + ":" + str( self.second )
     #}
 
     def SetSeconds( self, seconds_: int ) -> None:
@@ -202,7 +207,7 @@ class AnalogClock(tk.Canvas):
 
         percent_time = self.time.total_seconds / self.time.seconds_per_day
 
-        print( f"{self.clock_title}:  -> {self.time.hours_per_day}:{self.time.minutes_per_hour}:{self.time.seconds_per_minute} -> {self.time.hour}:{self.time.minute}:{self.time.second} -> Seconds={total_seconds} -> {percent_time:.5f}" )
+        print( f"{self.clock_title}:  -> {self.time.hours_per_day}:{self.time.minutes_per_hour}:{self.time.seconds_per_minute} -> {self.time} -> Seconds={total_seconds} -> {percent_time:.5f} -> factor {self.time.seconds_factor}" )
 
         self.__draw_clock( self.time )
         self.after( 1000, self.__update_clock )
@@ -490,8 +495,9 @@ if ( __name__ == "__main__" ):
     clock1 = AnalogClock( frame, "Legacy", legacy_clock )
     clock1.pack( )
 
-    metric_clock = Time( hours_per_day = 100, minutes_per_hour = 9, seconds_per_minute = 96 )
-    clock2 = AnalogClock( frame, "Metric", metric_clock, radius = 330 )
+    # Radius 320 is good for clock face of 100 numbers.
+    metric_clock = Time(  seconds_per_day = 1000000, hours_per_day = 100, minutes_per_hour = 100, seconds_per_minute = 100 )
+    clock2 = AnalogClock( frame, "Metric", metric_clock, radius = 320 )
     clock2.pack( )
 
     frame.mainloop( )
