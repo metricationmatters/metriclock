@@ -37,7 +37,7 @@ class AnalogClock(tk.Canvas):
     
     def __init__(
         self,
-        master,
+        frame,
         hours_per_day: int = 24,
         minutes_per_hour: int = 60,
         seconds_per_minute: int = 60,
@@ -68,7 +68,7 @@ class AnalogClock(tk.Canvas):
         ):
     #{
         ###  Parameter variables
-        self.master = master
+        self.frame = frame
         self.hours_per_day = hours_per_day
         self.minutes_per_hour = minutes_per_hour
         self.seconds_per_minute = seconds_per_minute
@@ -106,14 +106,14 @@ class AnalogClock(tk.Canvas):
         #{
             try:
             #{
-                if ( master.winfo_name( ).startswith( "!ctkframe" ) ):
+                if ( self.frame.winfo_name( ).startswith( "!ctkframe" ) ):
                 #{
                     # getting bg_color of customtkinter frames
-                    self.fg_color = master._apply_appearance_mode( master.cget( "fg_color" ) )
+                    self.fg_color = self.frame._apply_appearance_mode( self.frame.cget( "fg_color" ) )
                 #}
                 else:
                 #{
-                    self.fg_color = master.cget( "bg" )
+                    self.fg_color = self.frame.cget( "bg" )
                 #}
             #}
             except:
@@ -128,7 +128,7 @@ class AnalogClock(tk.Canvas):
 
         self.__transparent_bg( )
         
-        super( ).__init__( self.master, bg = self.bg_color, width = 2 * radius, height = 2 * radius, bd = 0, highlightthickness = 0 )
+        super( ).__init__( self.frame, bg = self.bg_color, width = 2 * radius, height = 2 * radius, bd = 0, highlightthickness = 0 )
 
 
         # Starting the clock update loop
@@ -142,14 +142,14 @@ class AnalogClock(tk.Canvas):
         #{
             try:
             #{
-                if ( self.master.winfo_name( ).startswith( "!ctkframe" ) ):
+                if ( self.frame.winfo_name( ).startswith( "!ctkframe" ) ):
                 #{
                     # getting bg_color of customtkinter frames
-                    self.bg_color = self.master._apply_appearance_mode( self.master.cget( "fg_color" ) )
+                    self.bg_color = self.frame._apply_appearance_mode( self.frame.cget( "fg_color" ) )
                 #}
                 else:
                 #{
-                    self.bg_color = self.master.cget( "bg" )
+                    self.bg_color = self.frame.cget( "bg" )
                 #}
             #}
             except:
