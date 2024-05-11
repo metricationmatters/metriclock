@@ -12,7 +12,6 @@ class Time:
                   hour  : int = 0,
                   minute: int = 0,
                   second: int = 0,
-                  seconds_factor: tuple[ int, float ] = 1,
                   seconds_per_day: int = 86400,
                   hours_per_day     : int = 24,
                   minutes_per_hour  : int = 60,
@@ -22,7 +21,7 @@ class Time:
         self.minute = minute
         self.second = second
 
-        self.seconds_factor = seconds_factor
+        self.seconds_factor = seconds_per_day / 86400
 
         self.seconds_per_day = seconds_per_day
 
