@@ -15,7 +15,6 @@ class AnalogClock(tk.Canvas):
         master,
         hours_per_day: int = 24,
         radius: int = 150,
-        shape: str = 'circle',    # Options : 'circle' or 'rectangle'
         border_width: int = 3,
         border_color: str = '#ffffff',
         clock_face_style: str = 'digit', # Options: 'digit or 'tick' or 'none'
@@ -45,7 +44,6 @@ class AnalogClock(tk.Canvas):
         self.master = master
         self.hours_per_day = hours_per_day
         self.radius = radius
-        self.shape = shape
         self.border_width = border_width
         self.border_color = border_color
         self.clock_face_style = clock_face_style
@@ -256,71 +254,16 @@ class AnalogClock(tk.Canvas):
     #{
         # Drawing clock face with a slight padding to not touch the canvas border
         padding = 5
-        if ( self.shape == 'circle' ):
-        #{
-            self.create_oval( padding, padding, 2 * ( self.radius - padding ), 2 * ( self.radius - padding ),
-                              width = self.border_width, fill = self.fg_color, outline = self.border_color )
-        #}
-        elif ( self.shape == 'rectangle' ):
-        #{
-            side_length = 2 * ( self.radius - padding )
-            self.create_rectangle( padding, padding, padding + side_length, padding + side_length,
-                                   width = self.border_width, fill = self.fg_color, outline = self.border_color )
-        #}
-        else:
-        #{
-            raise ValueError( "Invalid value for 'shape'. Use 'circle' or 'rectangle'." )
-        #}
+        self.create_oval( padding, padding, 2 * ( self.radius - padding ), 2 * ( self.radius - padding ),
+                          width = self.border_width, fill = self.fg_color, outline = self.border_color )
     #}
 
     def __coordinate_clock_numbers( self, i ):
     #{
         # Getting Coordinates for clock numbers
-        x_adjust = 0
-        y_adjust = 0
-        if ( self.shape == 'rectangle' ):
-        #{
-            # Adjusting coordinates for numbers in a rectangle
-            x_adjust = 10
-            y_adjust = 13
-        #}
-
         angle = math.radians( i * ( 360 / self.hours_per_day ) )
-        if ( i == 2 or i == 4 ):
-        #{
-            x = self.radius + self.radius * 0.8 * math.sin( angle ) + x_adjust
-            y = self.radius - self.radius * 0.8 * math.cos( angle )
-        #}
-        elif ( i == 5 ):
-        #{
-            x = self.radius + self.radius * 0.8 * math.sin( angle ) + 4
-            y = self.radius - self.radius * 0.8 * math.cos( angle ) + y_adjust
-        #}
-        elif ( i == 7 ):
-        #{
-            x = self.radius + self.radius * 0.8 * math.sin( angle ) - 4
-            y = self.radius - self.radius * 0.8 * math.cos( angle ) + y_adjust
-        #}
-        elif ( i == 8 or i == 10 ):
-        #{
-            x = self.radius + self.radius * 0.8 * math.sin( angle ) - x_adjust
-            y = self.radius - self.radius * 0.8 * math.cos( angle )
-        #}
-        elif ( i == 11 ):
-        #{
-            x = self.radius + self.radius * 0.8 * math.sin( angle ) - 4
-            y = self.radius - self.radius * 0.8 * math.cos( angle ) - y_adjust
-        #}
-        elif ( i == 1 ):
-        #{
-            x = self.radius + self.radius * 0.8 * math.sin( angle ) + 4
-            y = self.radius - self.radius * 0.8 * math.cos( angle ) - y_adjust
-        #}
-        else:
-        #{
-            x = self.radius + self.radius * 0.8 * math.sin( angle )
-            y = self.radius - self.radius * 0.8 * math.cos( angle )
-        #}
+        x = self.radius + self.radius * 0.8 * math.sin( angle )
+        y = self.radius - self.radius * 0.8 * math.cos( angle )
             
         return x, y
     #}
@@ -368,7 +311,6 @@ class AnalogClock(tk.Canvas):
         '''
         To configure some options of the clock
         radius: int = 150,
-        shape: str = 'circle',    # Options : 'circle' or 'rectangle'
         border_width: int = 3,
         border_color: str = '#a6a6a6',
         clock_face_style: str = 'digit', # Options: 'digit or 'tick' or 'none'
@@ -398,11 +340,6 @@ class AnalogClock(tk.Canvas):
             self.config( width = 2 * self.radius, height = 2 * self.radius )
         #}
         
-        if ( 'shape' in kwargs ):
-        #{
-            self.shape = kwargs.pop( 'shape' )
-        #}
-
         if ( 'border_width' in kwargs ):
         #{
             self.border_width = kwargs.pop( 'border_width' )
