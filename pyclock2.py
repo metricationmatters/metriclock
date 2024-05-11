@@ -13,6 +13,7 @@ class AnalogClock(tk.Canvas):
     def __init__(
         self,
         master,
+        hours_per_day: int = 24,
         radius: int = 150,
         shape: str = 'circle',    # Options : 'circle' or 'rectangle'
         border_width: int = 3,
@@ -25,9 +26,9 @@ class AnalogClock(tk.Canvas):
         font: Tuple[str, int, str] = ('Calibri', 12, 'normal'),
         font_color: str = 'black',
         
-        hour_color: str = '#ff0000',
-        minute_color: str = '#00ff00',
-        second_color: str = '#0000ff',
+        hour_color:   str = '#ff0000', # red
+        minute_color: str = '#00ff00', # greem
+        second_color: str = '#0000ff', # blue
         
         hour_hand_width: int = 7,
         minute_hand_width: int = 5,
@@ -42,6 +43,7 @@ class AnalogClock(tk.Canvas):
     #{
         ###  Parameter variables
         self.master = master
+        self.hours_per_day = hours_per_day
         self.radius = radius
         self.shape = shape
         self.border_width = border_width
@@ -154,8 +156,10 @@ class AnalogClock(tk.Canvas):
 
         seconds = self.base_time.second
         minutes = self.base_time.minute
-        hours = self.base_time.hour % 12
+        hours = self.base_time.hour
         
+        print( f"{hours}:{minutes}:{seconds}" )
+
         self.__draw_clock( seconds, minutes, hours )
         self.after( 1000, self.__update_clock )
     #}
@@ -176,21 +180,21 @@ class AnalogClock(tk.Canvas):
         # Drawing clock numbers
         if ( not self.quarter_hour ):           ## If `quarter_hour` is False.
         #{
-            for i in range( 1, 13 ):
+            for i in range( 1, self.hours_per_day + 1 ):
                 x, y = self.__coordinate_clock_numbers( i )
                 self.__assign_clock_face_style( i, x, y )
                 # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}
         elif ( self.quarter_hour and not self.quarter_symbol ): ## If `quarter_hour` is True and `quarter_symbol` is False.
         #{
-            for i in range( 3, 13, 3 ):                             ## Only for 3, 6, 9, 12
+            for i in range( 3, self.hours_per_day + 1, 3 ):                             ## Only for 3, 6, 9, 12
                 x, y = self.__coordinate_clock_numbers( i )
                 self.__assign_clock_face_style( i, x, y )
                 # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}                
         elif ( self.quarter_hour and self.quarter_symbol ):         ## If `quarter_hour` is True and `quarter_symbol` is True.
         #{
-            for i in range(1, 13):                              ## For all numbers
+            for i in range( 1, self.hours_per_day + 1 ):                              ## For all numbers
             #{
                 x, y = self.__coordinate_clock_numbers( i )
                     
@@ -215,7 +219,7 @@ class AnalogClock(tk.Canvas):
                         
 
         # Drawing hour hand
-        hour_angle = math.radians( ( hours % 12 ) * 30 + ( minutes / 60 ) * 30 )
+        hour_angle = math.radians( hours * ( 360 / self.hours_per_day ) )
         hour_x = self.radius + self.radius * 0.4 * math.sin( hour_angle )
         hour_y = self.radius - self.radius * 0.4 * math.cos( hour_angle )
         self.create_line(
@@ -281,7 +285,7 @@ class AnalogClock(tk.Canvas):
             y_adjust = 13
         #}
 
-        angle = math.radians( i * 30 )
+        angle = math.radians( i * ( 360 / self.hours_per_day ) )
         if ( i == 2 or i == 4 ):
         #{
             x = self.radius + self.radius * 0.8 * math.sin( angle ) + x_adjust
