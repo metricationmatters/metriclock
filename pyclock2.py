@@ -6,6 +6,29 @@ import math
 from datetime import datetime
 from typing import Optional, Tuple
 
+class Time:
+#{
+    def __init__( self,
+                  hour  : int,
+                  minute: int,
+                  second: int,
+                  hours_per_day     : tuple[ int, float ] = 24,
+                  minutes_per_hour  : tuple[ int, float ] = 60,
+                  seconds_per_minute: tuple[ int, float ] = 60 ) -> None:
+    #{
+        self.hour   = hour
+        self.minute = minute
+        self.second = second
+
+        self.hours_per_day      = hours_per_day
+        self.minutes_per_hour   = minutes_per_hour
+        self.seconds_per_minute = seconds_per_minute
+
+        self.seconds_per_day  = self.hours_per_day * self.minutes_per_hour * self.seconds_per_minute
+        self.seconds_per_hour = self.minutes_per_hour * self.seconds_per_minute
+    #}
+#}
+
 class AnalogClock(tk.Canvas):
 #{
     """An analog clock widget"""
@@ -13,7 +36,6 @@ class AnalogClock(tk.Canvas):
     def __init__(
         self,
         master,
-        seconds_per_day: int = 86400,
         hours_per_day: int = 24,
         minutes_per_hour: int = 60,
         seconds_per_minute: int = 60,
@@ -45,7 +67,6 @@ class AnalogClock(tk.Canvas):
     #{
         ###  Parameter variables
         self.master = master
-        self.seconds_per_day = seconds_per_day
         self.hours_per_day = hours_per_day
         self.minutes_per_hour = minutes_per_hour
         self.seconds_per_minute = seconds_per_minute
@@ -158,16 +179,28 @@ class AnalogClock(tk.Canvas):
         # Updating the last update time for the next cycle
         self.last_update_time = now
 
-        seconds = self.base_time.second
-        minutes = self.base_time.minute
-        hours = self.base_time.hour
+        legacy = Time( 0, 0, 0 )
+        normal = Time( 0, 0, 0 )
+        metric = Time( 0, 0, 0, hours_per_day = 100 )
+
+        legacy.second = self.base_time.second
+        legacy.minute = self.base_time.minute
+        legacy.hour   = self.base_time.hour
         
-        total_time = hours * (self.seconds_per_minute * self.minutes_per_hour ) + minutes * ( self.seconds_per_minute ) + seconds
-        percent_time = total_time / self.seconds_per_day
+        total_seconds = legacy.hour * (legacy.seconds_per_minute * legacy.minutes_per_hour ) + \
+                        legacy.minute * ( legacy.seconds_per_minute ) + \
+                        legacy.second
 
-        print( f"{hours}:{minutes}:{seconds} -> {total_time} -> {percent_time:.5f}" )
+        percent_time = total_seconds / legacy.seconds_per_day
 
-        self.__draw_clock( seconds, minutes, hours )
+        normal.hour   = int( total_seconds / normal.seconds_per_hour )
+        normal.minute = int( ( total_seconds - normal.seconds_per_hour * normal.hour ) / normal.seconds_per_minute )
+        normal.second = total_seconds - normal.seconds_per_hour * normal.hour - normal.seconds_per_minute * normal.minute
+
+
+        print( f"Legacy {legacy.hour}:{legacy.minute}:{legacy.second} -> TotalSeconds={total_seconds} -> {percent_time:.5f}" )
+
+        self.__draw_clock( legacy.second, legacy.minute, legacy.hour )
         self.after( 1000, self.__update_clock )
     #}
 
