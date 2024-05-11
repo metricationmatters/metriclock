@@ -21,6 +21,8 @@ class Time:
         self.minute = minute
         self.second = second
 
+        self.total_seconds = 0
+        
         self.seconds_factor = seconds_per_day / 86400
 
         self.seconds_per_day = seconds_per_day
@@ -36,11 +38,11 @@ class Time:
 
     def SetSeconds( self, seconds_: int ) -> None:
     #{
-        seconds = seconds_ * self.seconds_factor
+        self.total_seconds = seconds_ * self.seconds_factor
 
-        self.hour   = int( seconds / self.seconds_per_hour )
-        self.minute = int( ( seconds - self.seconds_per_hour * self.hour ) / self.seconds_per_minute )
-        self.second = seconds - self.seconds_per_hour * self.hour - self.seconds_per_minute * self.minute
+        self.hour   = int( self.total_seconds / self.seconds_per_hour )
+        self.minute = int( ( self.total_seconds - self.seconds_per_hour * self.hour ) / self.seconds_per_minute )
+        self.second = self.total_seconds - self.seconds_per_hour * self.hour - self.seconds_per_minute * self.minute
     #}
 #}
 
@@ -196,9 +198,9 @@ class AnalogClock(tk.Canvas):
                         self.base_time.minute * ( 60 ) + \
                         self.base_time.second
 
-        percent_time = total_seconds / self.time.seconds_per_day
-
         self.time.SetSeconds( total_seconds )
+
+        percent_time = self.time.total_seconds / self.time.seconds_per_day
 
         print( f"{self.clock_title}:  -> {self.time.hours_per_day}:{self.time.minutes_per_hour}:{self.time.seconds_per_minute} -> {self.time.hour}:{self.time.minute}:{self.time.second} -> Seconds={total_seconds} -> {percent_time:.5f}" )
 
