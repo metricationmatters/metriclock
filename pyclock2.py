@@ -42,7 +42,10 @@ class Time:
 
     def __str__( self ) -> str:
     #{
-        return str( self.hour ) + ":" + str( self.minute ) + ":" + str( self.second )
+        max_size: int = max( self.hours_per_day - 1, self.minutes_per_hour - 1, self.seconds_per_minute - 1 )
+        s = len( str( max_size ) )
+        sform = "{hour:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}"
+        return str.format( sform, hour = self.hour, minute = self.minute, second = int( self.second ) )
     #}
 
     def SetSeconds( self, seconds_: int ) -> None:
