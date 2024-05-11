@@ -26,6 +26,8 @@ class Time:
 
         self.seconds_per_day  = self.hours_per_day * self.minutes_per_hour * self.seconds_per_minute
         self.seconds_per_hour = self.minutes_per_hour * self.seconds_per_minute
+
+        assert self.seconds_per_day == 86400
     #}
 #}
 
@@ -181,7 +183,7 @@ class AnalogClock(tk.Canvas):
 
         legacy = Time( 0, 0, 0 )
         normal = Time( 0, 0, 0 )
-        metric = Time( 0, 0, 0, hours_per_day = 100 )
+        metric = Time( 0, 0, 0 )
 
         legacy.second = self.base_time.second
         legacy.minute = self.base_time.minute
@@ -482,7 +484,7 @@ if ( __name__ == "__main__" ):
     frame = tk.Tk( )
     frame.title( 'Analog Clock' )
 
-    clock = AnalogClock( frame, radius = 150, )
+    clock = AnalogClock( frame, radius = 150 )
     clock.pack( )
 
     frame.mainloop( )
