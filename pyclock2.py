@@ -17,7 +17,7 @@ class AnalogClock(tk.Canvas):
         shape: str = 'circle',    # Options : 'circle' or 'rectangle'
         border_width: int = 3,
         border_color: str = '#ffffff',
-        clock_face_style: str = 'digit', # Options: 'digit or 'roman' or 'tick' or 'none'
+        clock_face_style: str = 'digit', # Options: 'digit or 'tick' or 'none'
         
         fg_color: str = "transparent",
         bg_color: str = "transparent",
@@ -324,18 +324,11 @@ class AnalogClock(tk.Canvas):
     def __assign_clock_face_style( self, i, x, y ):
     #{
         #####   Some constants   #####
-        ROMAN_NUMERALS = { 1: 'I',   2: 'II',   3: 'III', 4: 'IV', 5: 'V',   6: 'VI',
-                           7: 'VII', 8: 'VIII', 9: 'IX', 10: 'X', 11: 'XI', 12: 'XII' }
         TICKS = { 1: '', 2: '', 3: '―', 4: '', 5: '', 6: '|', 7: '', 8: '', 9: '―', 10: '', 11: '', 12: '|'}
         EMPTY = { 1: '', 2: '', 3: '',  4: '', 5: '', 6: '',  7: '', 8: '', 9: '',  10: '', 11: '', 12: '' }
         if ( self.clock_face_style == 'digit' or self.clock_face_style == 'DIGIT' or self.clock_face_style == 'Digit' ):
         #{
             self.create_text( x, y, text = str( i ), font = self.font, fill = self.font_color )
-        #}
-            
-        elif ( self.clock_face_style == 'roman' or self.clock_face_style == 'ROMAN' or self.clock_face_style == 'Roman' ):
-        #{
-            self.create_text( x, y, text = ROMAN_NUMERALS[ i ], font = self.font, fill = self.font_color )
         #}
         elif ( self.clock_face_style == 'tick' or self.clock_face_style == 'TICK' or self.clock_face_style == 'Tick' ):
         #{
@@ -374,7 +367,7 @@ class AnalogClock(tk.Canvas):
         shape: str = 'circle',    # Options : 'circle' or 'rectangle'
         border_width: int = 3,
         border_color: str = '#a6a6a6',
-        clock_face_style: str = 'digit', # Options: 'digit or 'roman' or 'tick' or 'none'
+        clock_face_style: str = 'digit', # Options: 'digit or 'tick' or 'none'
         
         fg_color: str = "transparent",
         bg_color: str = "transparent",
