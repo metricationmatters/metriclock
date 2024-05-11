@@ -25,10 +25,6 @@ class Time:
         self.minute = minute
         self.second = second
 
-        self.total_seconds = 0
-
-        self.seconds_factor = seconds_per_day / 86400
-
         self.seconds_per_day = seconds_per_day
 
         self.hours_per_day      = hours_per_day
@@ -36,6 +32,9 @@ class Time:
         self.seconds_per_minute = seconds_per_minute
 
         self.seconds_per_hour = self.minutes_per_hour * self.seconds_per_minute
+
+        self.seconds_factor = seconds_per_day / 86400
+        self.total_seconds = 0
 
         assert self.seconds_per_day == self.hours_per_day * self.minutes_per_hour * self.seconds_per_minute
     #}
@@ -281,7 +280,7 @@ class AnalogClock(tk.Canvas):
 
         percent_time = self.time.total_seconds / self.time.seconds_per_day
   
-        params = str.format( "F={factor:.3f} -> S={total_seconds} -> {percent_time:.5f}",
+        params = str.format( "F={factor:.3f} -> S={total_seconds} -> %={percent_time:.5f}",
                              total_seconds = int( self.time.total_seconds ),
                              factor = self.time.seconds_factor,
                              percent_time = percent_time )
@@ -515,20 +514,19 @@ class AnalogClock(tk.Canvas):
 if ( __name__ == "__main__" ):
 #{
     # Default metric values:
-
     metric_hours_per_day = 100
     metric_minutes_per_hour = 100
     metric_seconds_per_minute = 100
 
     if ( len( sys.argv ) > 1 ):
     #{
-       metric_hours_per_day, metric_minutes_per_hour, metric_seconds_per_minute = str.split( sys.argv[ 1 ], ":" )
-       metric_hours_per_day = int( metric_hours_per_day )
-       metric_minutes_per_hour = int( metric_minutes_per_hour )
-       metric_seconds_per_minute = int( metric_seconds_per_minute )
+       set_hours_per_day, set_minutes_per_hour, set_seconds_per_minute = str.split( sys.argv[ 1 ], ":" )
+       metric_hours_per_day = int( set_hours_per_day )
+       metric_minutes_per_hour = int( set_minutes_per_hour )
+       metric_seconds_per_minute = int( set_seconds_per_minute )
     #}
 
-    metric_seconds_per_day = metric_hours_per_day * metric_minutes_per_hour * metric_seconds_per_minute
+    metric_second_per_day = metric_hours_per_day * metric_minutes_per_hour * metric_seconds_per_minute
 
     frame = tk.Tk( )
     frame.title( 'Analog Clock' )
@@ -537,10 +535,10 @@ if ( __name__ == "__main__" ):
     clock1 = AnalogClock( frame, "Legacy", legacy_clock )
     clock1.pack( )
 
-    metric_clock = Time( seconds_per_day = metric_seconds_per_day,
+    metric_clock = Time( seconds_per_day = metric_second_per_day,
                          hours_per_day = metric_hours_per_day,
                          minutes_per_hour = metric_minutes_per_hour,
-                         seconds_per_minute = metric_minutes_per_hour )
+                         seconds_per_minute = metric_seconds_per_minute )
     
     # Radius 320 is good for clock face of 100 numbers.
     clock2 = AnalogClock( frame, "Metric", metric_clock, radius = 320 )
