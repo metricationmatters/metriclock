@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # Analog Clock
+# Based on https://github.com/Arthur-101/CTkClock/tree/main
 
 import tkinter as tk
 import math
