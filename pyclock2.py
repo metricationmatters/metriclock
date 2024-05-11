@@ -230,7 +230,7 @@ class AnalogClock(tk.Canvas):
         self.__draw_clock_shape( )
        
         # Drawing clock numbers
-        self.__draw_clock_numbers( time_, self.font_color, radius_ )
+        self.__draw_clock_numbers( time_, self.hour_color, radius_ )
 
         # Drawing hour hand
         hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
@@ -273,14 +273,12 @@ class AnalogClock(tk.Canvas):
             for i in range( 1, time_.hours_per_day + 1 ):
                 x, y = self.__coordinate_clock_numbers( i, radius_ )
                 self.__assign_clock_face_style( color_, i, x, y )
-                # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}
         elif ( self.quarter_hour and not self.quarter_symbol ): ## If `quarter_hour` is True and `quarter_symbol` is False.
         #{
             for i in range( 3, time_.hours_per_day + 1, 3 ):                             ## Only for 3, 6, 9, 12
                 x, y = self.__coordinate_clock_numbers( i, radius_ )
                 self.__assign_clock_face_style( color_, i,  x, y )
-                # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}                
         elif ( self.quarter_hour and self.quarter_symbol ):         ## If `quarter_hour` is True and `quarter_symbol` is True.
         #{
@@ -291,7 +289,6 @@ class AnalogClock(tk.Canvas):
                 if ( i % 3 == 0 ):                   ## Writing Only 3, 6, 9, 12
                 #{
                     self.__assign_clock_face_style( color_, i, x, y )
-                    # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
                 #}
                 else:                            ## Drawing Symbols on place of numbers not divisible by `3`
                 #{
@@ -301,7 +298,7 @@ class AnalogClock(tk.Canvas):
                     #}
                     else:          ##  If `quarter_symbol_color` is NOT given, using same color as text
                     #{
-                        self.create_text( x, y, text = self.quarter_symbol, font = self.font, fill = self.font_color )
+                        self.create_text( x, y, text = self.quarter_symbol, font = self.font, fill = color_ )
                     #}
                 #}
             #}
