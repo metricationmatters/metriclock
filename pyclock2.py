@@ -13,6 +13,7 @@ class AnalogClock(tk.Canvas):
     def __init__(
         self,
         master,
+        seconds_per_day: int = 86400,
         hours_per_day: int = 24,
         minutes_per_hour: int = 60,
         seconds_per_minute: int = 60,
@@ -44,6 +45,7 @@ class AnalogClock(tk.Canvas):
     #{
         ###  Parameter variables
         self.master = master
+        self.seconds_per_day = seconds_per_day
         self.hours_per_day = hours_per_day
         self.minutes_per_hour = minutes_per_hour
         self.seconds_per_minute = seconds_per_minute
@@ -160,7 +162,10 @@ class AnalogClock(tk.Canvas):
         minutes = self.base_time.minute
         hours = self.base_time.hour
         
-        print( f"{hours}:{minutes}:{seconds}" )
+        total_time = hours * (self.seconds_per_minute * self.minutes_per_hour ) + minutes * ( self.seconds_per_minute ) + seconds
+        percent_time = total_time / self.seconds_per_day
+
+        print( f"{hours}:{minutes}:{seconds} -> {total_time} -> {percent_time:.5f}" )
 
         self.__draw_clock( seconds, minutes, hours )
         self.after( 1000, self.__update_clock )
@@ -339,7 +344,7 @@ class AnalogClock(tk.Canvas):
         '''
         if ( 'radius' in kwargs ):
         #{
-            self.radius = kwargs.pop('radius')
+            self.radius = kwargs.pop( 'radius' )
             self.config( width = 2 * self.radius, height = 2 * self.radius )
         #}
         
