@@ -230,7 +230,7 @@ class AnalogClock(tk.Canvas):
         self.__draw_clock_shape( )
        
         # Drawing clock numbers
-        self.__draw_clock_numbers( time_, radius_ )
+        self.__draw_clock_numbers( time_, self.font_color, radius_ )
 
         # Drawing hour hand
         hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
@@ -266,20 +266,20 @@ class AnalogClock(tk.Canvas):
                         )
     #}
 
-    def __draw_clock_numbers( self, time_: Time, radius_ ) -> None:
+    def __draw_clock_numbers( self, time_: Time, color_, radius_ ) -> None:
     #{
         if ( not self.quarter_hour ):           ## If `quarter_hour` is False.
         #{
             for i in range( 1, time_.hours_per_day + 1 ):
                 x, y = self.__coordinate_clock_numbers( i, radius_ )
-                self.__assign_clock_face_style( i, x, y )
+                self.__assign_clock_face_style( color_, i, x, y )
                 # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}
         elif ( self.quarter_hour and not self.quarter_symbol ): ## If `quarter_hour` is True and `quarter_symbol` is False.
         #{
             for i in range( 3, time_.hours_per_day + 1, 3 ):                             ## Only for 3, 6, 9, 12
                 x, y = self.__coordinate_clock_numbers( i, radius_ )
-                self.__assign_clock_face_style( i, x, y )
+                self.__assign_clock_face_style( color_, i,  x, y )
                 # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}                
         elif ( self.quarter_hour and self.quarter_symbol ):         ## If `quarter_hour` is True and `quarter_symbol` is True.
@@ -290,7 +290,7 @@ class AnalogClock(tk.Canvas):
                     
                 if ( i % 3 == 0 ):                   ## Writing Only 3, 6, 9, 12
                 #{
-                    self.__assign_clock_face_style( i, x, y )
+                    self.__assign_clock_face_style( color_, i, x, y )
                     # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
                 #}
                 else:                            ## Drawing Symbols on place of numbers not divisible by `3`
@@ -326,21 +326,21 @@ class AnalogClock(tk.Canvas):
         return x, y
     #}
 
-    def __assign_clock_face_style( self, i, x, y ):
+    def __assign_clock_face_style( self, color_, i_, x_, y_ ):
     #{
         #####   Some constants   #####
         TICKS = { 1: '', 2: '', 3: '/', 4: '', 5: '', 6: '-', 7: '', 8: '', 9: '\\', 10: '', 11: '', 12: '|', 13: '', 14: '', 15: '/', 16: '', 17: '', 18: '-', 19: '', 20: '', 21: '\\', 22: '', 23: '', 24: '|' }
         if ( self.clock_face_style == 'digit' or self.clock_face_style == 'DIGIT' or self.clock_face_style == 'Digit' ):
         #{
-            self.create_text( x, y, text = str( i ), font = self.font, fill = self.font_color )
+            self.create_text( x_, y_, text = str( i_ ), font = self.font, fill = color_ )
         #}
         elif ( self.clock_face_style == 'tick' or self.clock_face_style == 'TICK' or self.clock_face_style == 'Tick' ):
         #{
-            self.create_text( x, y, text = TICKS[ i ], font = self.font, fill = self.font_color )
+            self.create_text( x_, y_, text = TICKS[ i_ ], font = self.font, fill = color_ )
         #}
         elif ( self.clock_face_style == None or self.clock_face_style == 'none' or self.clock_face_style == 'None' or self.clock_face_style == 'NONE' ):
         #{
-            self.create_text( x, y, text = '', font = self.font, fill = self.font_color )
+            self.create_text( x_, y_, text = '', font = self.font, fill = color_ )
         #}
     #}
 
