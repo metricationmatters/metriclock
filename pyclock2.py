@@ -230,8 +230,8 @@ class AnalogClock(tk.Canvas):
         self.__draw_clock_shape( )
        
         # Drawing clock numbers
-        self.__draw_clock_numbers( self.time.hours_per_day,    self.hour_color,   radius_ ) # Hours
-        #self.__draw_clock_numbers( self.time.minutes_per_hour, self.minute_color, radius_ * 0.8 ) # minutes
+        self.__draw_clock_numbers( self.time.hours_per_day,    self.hour_color,   radius_, radius_ ) # Hours
+        #self.__draw_clock_numbers( self.time.minutes_per_hour, self.minute_color, radius_, radius_ * 0.8 ) # minutes
 
         # Drawing hour hand
         hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
@@ -267,25 +267,25 @@ class AnalogClock(tk.Canvas):
                         )
     #}
 
-    def __draw_clock_numbers( self, total_numbers_: int, color_, radius_ ) -> None:
+    def __draw_clock_numbers( self, total_numbers_: int, color_, length_, radius_ ) -> None:
     #{
         if ( not self.quarter_hour ):           ## If `quarter_hour` is False.
         #{
             for i in range( 1, total_numbers_ + 1 ):
-                x, y = self.__coordinate_clock_numbers( i, radius_, total_numbers_ )
+                x, y = self.__coordinate_clock_numbers( i, length_, radius_, total_numbers_ )
                 self.__assign_clock_face_style( color_, i, x, y )
         #}
         elif ( self.quarter_hour and not self.quarter_symbol ): ## If `quarter_hour` is True and `quarter_symbol` is False.
         #{
             for i in range( 3, total_numbers_ + 1, 3 ):                             ## Only for 3, 6, 9, 12
-                x, y = self.__coordinate_clock_numbers( i, radius_, total_numbers_ )
+                x, y = self.__coordinate_clock_numbers( i, length_, radius_, total_numbers_ )
                 self.__assign_clock_face_style( color_, i,  x, y )
         #}                
         elif ( self.quarter_hour and self.quarter_symbol ):         ## If `quarter_hour` is True and `quarter_symbol` is True.
         #{
             for i in range( 1, total_numbers_ + 1 ):                              ## For all numbers
             #{
-                x, y = self.__coordinate_clock_numbers( i, radius_, total_numbers_ )
+                x, y = self.__coordinate_clock_numbers( i, length_, radius_, total_numbers_ )
                     
                 if ( i % 3 == 0 ):                   ## Writing Only 3, 6, 9, 12
                 #{
@@ -314,12 +314,12 @@ class AnalogClock(tk.Canvas):
                           width = self.border_width, fill = self.fg_color, outline = self.border_color )
     #}
 
-    def __coordinate_clock_numbers( self, i, radius_, total_number_ ):
+    def __coordinate_clock_numbers( self, i, length_, radius_, total_number_ ):
     #{
         # Getting Coordinates for clock numbers
         angle = math.radians( i * ( 360 / total_number_ ) )
-        x = radius_ + radius_ * 0.8 * math.sin( angle )
-        y = radius_ - radius_ * 0.8 * math.cos( angle )
+        x = length_ + radius_ * 0.8 * math.sin( angle )
+        y = length_ - radius_ * 0.8 * math.cos( angle )
             
         return x, y
     #}
