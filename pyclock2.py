@@ -12,29 +12,36 @@ class Time:
                   hour  : int = 0,
                   minute: int = 0,
                   second: int = 0,
-                  hours_per_day     : tuple[ int, float ] = 24,
-                  minutes_per_hour  : tuple[ int, float ] = 60,
-                  seconds_per_minute: tuple[ int, float ] = 60 ) -> None:
+                  seconds_factor: tuple[ int, float ] = 1,
+                  seconds_per_day: int = 86400,
+                  hours_per_day     : int = 24,
+                  minutes_per_hour  : int = 60,
+                  seconds_per_minute: int = 60 ) -> None:
     #{
         self.hour   = hour
         self.minute = minute
         self.second = second
 
+        self.seconds_factor = seconds_factor
+
+        self.seconds_per_day = seconds_per_day
+
         self.hours_per_day      = hours_per_day
         self.minutes_per_hour   = minutes_per_hour
         self.seconds_per_minute = seconds_per_minute
 
-        self.seconds_per_day  = self.hours_per_day * self.minutes_per_hour * self.seconds_per_minute
         self.seconds_per_hour = self.minutes_per_hour * self.seconds_per_minute
 
-        assert self.seconds_per_day == 86400
+        assert self.seconds_per_day == self.hours_per_day * self.minutes_per_hour * self.seconds_per_minute
     #}
 
     def SetSeconds( self, seconds_: int ) -> None:
     #{
-        self.hour   = int( seconds_ / self.seconds_per_hour )
-        self.minute = int( ( seconds_ - self.seconds_per_hour * self.hour ) / self.seconds_per_minute )
-        self.second = seconds_ - self.seconds_per_hour * self.hour - self.seconds_per_minute * self.minute
+        seconds = seconds_ * self.seconds_factor
+
+        self.hour   = int( seconds / self.seconds_per_hour )
+        self.minute = int( ( seconds - self.seconds_per_hour * self.hour ) / self.seconds_per_minute )
+        self.second = seconds - self.seconds_per_hour * self.hour - self.seconds_per_minute * self.minute
     #}
 #}
 
