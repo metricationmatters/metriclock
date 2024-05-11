@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Optional, Tuple
 
 class AnalogClock(tk.Canvas):
+#{
     """An analog clock widget"""
     
     def __init__(
@@ -38,7 +39,7 @@ class AnalogClock(tk.Canvas):
         quarter_symbol_color: Optional[str] = None,
         # **kwargs
         ):
-
+    #{
         ###  Parameter variables
         self.master = master
         self.radius = radius
@@ -91,8 +92,10 @@ class AnalogClock(tk.Canvas):
 
         # Starting the clock update loop
         self.__update_clock()
+    #}
 
-    def __transparent_bg(self,):
+    def __transparent_bg( self, ):
+    #{
         # Setting the canvas background color to match the parent's background color
         if self.bg_color.lower() == 'transparent':
             try:
@@ -103,9 +106,11 @@ class AnalogClock(tk.Canvas):
                     self.bg_color = self.master.cget("bg")
             except:  
                 self.bg_color = "white"
+    #}
         
 
-    def __update_clock(self):
+    def __update_clock( self ):
+    #{
         """
         Update the clock display with the current time, and schedule the next update.
         """
@@ -128,8 +133,10 @@ class AnalogClock(tk.Canvas):
         
         self.__draw_clock(seconds, minutes, hours)
         self.after(1000, self.__update_clock)
+    #}
 
-    def __draw_clock(self, seconds, minutes, hours):
+    def __draw_clock( self, seconds, minutes, hours ):
+    #{
         """
         Draw a clock on the canvas based on the given seconds, minutes, and hours.
         Parameters:
@@ -200,9 +207,10 @@ class AnalogClock(tk.Canvas):
                         width=self.second_hand_width,
                         fill=self.second_color
                         )
-    
-    
-    def __draw_clock_shape(self,):
+    #}
+        
+    def __draw_clock_shape( self, ):
+    #{
         # Drawing clock face with a slight padding to not touch the canvas border
         padding = 5
         if self.shape == 'circle':
@@ -214,8 +222,10 @@ class AnalogClock(tk.Canvas):
                       width=self.border_width, fill=self.fg_color, outline=self.border_color)
         else:
             raise ValueError("Invalid value for 'shape'. Use 'circle' or 'rectangle'.")
+    #}
 
-    def __coordinate_clock_numbers(self, i):
+    def __coordinate_clock_numbers( self, i ):
+    #{
         # Getting Coordinates for clock numbers
         x_adjust = 0
         y_adjust = 0
@@ -248,8 +258,10 @@ class AnalogClock(tk.Canvas):
             y = self.radius - self.radius * 0.8 * math.cos(angle)
             
         return x, y
+    #}
 
-    def __assign_clock_face_style(self, i, x, y):
+    def __assign_clock_face_style( self, i, x, y ):
+    #{
         #####   Some constants   #####
         ROMAN_NUMERALS = {1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V', 6: 'VI',
                         7: 'VII', 8: 'VIII', 9: 'IX', 10: 'X', 11: 'XI', 12: 'XII'}
@@ -266,25 +278,31 @@ class AnalogClock(tk.Canvas):
 
         elif self.clock_face_style == None or self.clock_face_style == 'none' or self.clock_face_style == 'None' or self.clock_face_style == 'NONE':
             self.create_text(x, y, text=EMPTY[i], font=self.font, fill=self.font_color)
+    #}
 
 
     ####################        METHODS        ####################
-    def get_current_time(self):
+    def get_current_time( self ):
+    #{
         '''
         This method returns the current time of the clock as a datetime object
         '''
         return self.base_time
+    #}
 
-    def get_current_strftime(self, format_string="%H:%M:%S"):
+    def get_current_strftime( self, format_string = "%H:%M:%S" ):
+    #{
         ''' 
         This method returns the current time of the clock as a formatted string
         The default format is HH:MM:SS, but you can pass another format if desired
         '''
-        return self.base_time.strftime(format_string)
+        return self.base_time.strftime( format_string )
+    #}
 
-    def configure(self, **kwargs):
+    def configure( self, **kwargs ):
+    #{
         '''
-        TO configure some options of the clock
+        To configure some options of the clock
         radius: int = 150,
         shape: str = 'circle',    # Options : 'circle' or 'rectangle'
         border_width: int = 3,
@@ -371,18 +389,21 @@ class AnalogClock(tk.Canvas):
         if 'quarter_symbol_color' in kwargs:
             self.quarter_symbol_color = kwargs.pop('quarter_symbol_color')
 
-
         # Update the clock appearance
-        self.__update_clock()
+        self.__update_clock( )
+    #}
+#}
 
-
+########
+# MAIN #
+########
 if ( __name__ == "__main__" ):
 #{
     frame = tk.Tk( )
-    frame.title('Analog Clock')
+    frame.title( 'Analog Clock' )
 
     clock = AnalogClock( frame, radius = 150, )
-    clock.pack()
+    clock.pack( )
 
-    frame.mainloop()
+    frame.mainloop( )
 #}
