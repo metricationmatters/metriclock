@@ -19,8 +19,8 @@ class AnalogClock(tk.Canvas):
         border_color: str = '#ffffff',
         clock_face_style: str = 'digit', # Options: 'digit or 'tick' or 'none'
         
-        fg_color: str = "transparent",
-        bg_color: str = "transparent",
+        fg_color: str = "white",
+        bg_color: str = "black",
         
         font: Tuple[str, int, str] = ('Calibri', 12, 'normal'),
         font_color: str = 'black',
