@@ -14,6 +14,8 @@ class AnalogClock(tk.Canvas):
         self,
         master,
         hours_per_day: int = 24,
+        minutes_per_hour: int = 60,
+        seconds_per_minute: int = 60,
         radius: int = 150,
         border_width: int = 3,
         border_color: str = '#ffffff',
@@ -43,6 +45,8 @@ class AnalogClock(tk.Canvas):
         ###  Parameter variables
         self.master = master
         self.hours_per_day = hours_per_day
+        self.minutes_per_hour = minutes_per_hour
+        self.seconds_per_minute = seconds_per_minute
         self.radius = radius
         self.border_width = border_width
         self.border_color = border_color
@@ -228,7 +232,7 @@ class AnalogClock(tk.Canvas):
                         )
 
         # Drawing minute hand
-        minute_angle = math.radians( minutes * 6 + ( seconds / 60 ) * 6 )
+        minute_angle = math.radians( minutes * ( 360 / self.minutes_per_hour ) )
         minute_x = self.radius + self.radius * 0.6 * math.sin( minute_angle )
         minute_y = self.radius - self.radius * 0.6 * math.cos( minute_angle )
         self.create_line(
@@ -239,7 +243,7 @@ class AnalogClock(tk.Canvas):
                         )
 
         # Drawing second hand
-        second_angle = math.radians( seconds * 6 )
+        second_angle = math.radians( seconds * ( 360 / self.seconds_per_minute ) )
         second_x = self.radius + self.radius * 0.7 * math.sin( second_angle )
         second_y = self.radius - self.radius * 0.7 * math.cos( second_angle )
         self.create_line(
