@@ -44,7 +44,7 @@ class Time:
     #{
         max_size: int = max( self.hours_per_day - 1, self.minutes_per_hour - 1, self.seconds_per_minute - 1 )
         s = len( str( max_size ) )
-        sform = "{hour:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}"
+        sform = "{hour:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}:{second:>0" + str( s ) + "d}"
         return str.format( sform, hour = self.hour, minute = self.minute, second = int( self.second ) )
     #}
 
@@ -55,6 +55,14 @@ class Time:
         self.hour   = int( self.total_seconds / self.seconds_per_hour )
         self.minute = int( ( self.total_seconds - self.seconds_per_hour * self.hour ) / self.seconds_per_minute )
         self.second = self.total_seconds - self.seconds_per_hour * self.hour - self.seconds_per_minute * self.minute
+    #}
+
+    def MaxHoursMinutesSeconds( self ) -> str:
+    #{
+        max_size: int = max( self.hours_per_day - 1, self.minutes_per_hour - 1, self.seconds_per_minute - 1 )
+        s = len( str( max_size ) )
+        sform = "{hour:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}"
+        return str.format( sform, hour = self.hours_per_day, minute = self.minutes_per_hour, second = self.seconds_per_minute )
     #}
 #}
 
@@ -212,10 +220,6 @@ class AnalogClock(tk.Canvas):
 
         self.time.SetSeconds( total_seconds )
 
-        percent_time = self.time.total_seconds / self.time.seconds_per_day
-
-        print( f"{self.clock_title}:  -> {self.time.hours_per_day}:{self.time.minutes_per_hour}:{self.time.seconds_per_minute} -> {self.time} -> Seconds={total_seconds} -> {percent_time:.5f} -> factor {self.time.seconds_factor}" )
-
         self.__draw_clock( self.time, self.radius )
         self.after( 1000, self.__update_clock )
     #}
@@ -270,8 +274,18 @@ class AnalogClock(tk.Canvas):
                           fill = self.second_color
                         )
         
-        # Draw HH:MM:SS in text a center of screen.
-        self.create_text( radius_, radius_, text = str( self.time ), font = self.font, fill = self.font_color )
+        # Draw HH:MM:SS in text a center of screen.        
+        self.create_text( radius_, radius_ - 20, text = self.clock_title, font = self.font, fill = self.font_color )
+        self.create_text( radius_, radius_ - 10, text = str( self.time.MaxHoursMinutesSeconds( ) ), font = self.font, fill = self.font_color )
+        self.create_text( radius_, radius_,      text = str( self.time ), font = self.font, fill = self.font_color )
+
+        percent_time = self.time.total_seconds / self.time.seconds_per_day
+  
+        params = str.format( "F={factor:.3f} -> S={total_seconds} -> {percent_time:.5f}",
+                             total_seconds = int( self.time.total_seconds ),
+                             factor = self.time.seconds_factor,
+                             percent_time = percent_time )
+        self.create_text( radius_, radius_ + 10, text = params, font = self.font, fill = self.font_color )
     #}
 
     def __draw_clock_numbers( self, total_numbers_: int, color_, length_, radius_ ) -> None:
