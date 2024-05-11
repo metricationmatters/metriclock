@@ -217,20 +217,57 @@ class AnalogClock(tk.Canvas):
         self.after( 1000, self.__update_clock )
     #}
 
-    def __draw_clock( self, time_, radius_: Time ) -> None:
+    def __draw_clock( self, time_: Time, radius_ ) -> None:
     #{
         """
         Draw a clock on the canvas based on the given seconds, minutes, and hours.
         Parameters:
-            hours (int): The hours component of the time.
-            minutes (int): The minutes component of the time.
-            seconds (int): The seconds component of the time.
+            time: The current time in hours, minutes, seconds.
+            radius: The radius of the circle.
         """
         self.delete( "all" )
 
         self.__draw_clock_shape( )
        
         # Drawing clock numbers
+        self.__draw_clock_numbers( time_, radius_ )
+
+        # Drawing hour hand
+        hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
+        hour_x = radius_ + radius_ * 0.4 * math.sin( hour_angle )
+        hour_y = radius_ - radius_ * 0.4 * math.cos( hour_angle )
+        self.create_line(
+                          radius_, radius_,
+                          hour_x, hour_y,
+                          width = self.hour_hand_width,
+                          fill = self.hour_color
+                        )
+
+        # Drawing minute hand
+        minute_angle = math.radians( time_.minute * ( 360 / time_.minutes_per_hour ) )
+        minute_x = radius_ + radius_ * 0.6 * math.sin( minute_angle )
+        minute_y = radius_ - radius_ * 0.6 * math.cos( minute_angle )
+        self.create_line(
+                          radius_, radius_, 
+                          minute_x, minute_y,
+                          width = self.minute_hand_width,
+                          fill = self.minute_color
+                        )
+
+        # Drawing second hand
+        second_angle = math.radians( time_.second * ( 360 / self.time.seconds_per_minute ) )
+        second_x = radius_ + radius_ * 0.7 * math.sin( second_angle )
+        second_y = radius_ - radius_ * 0.7 * math.cos( second_angle )
+        self.create_line(
+                          radius_, radius_,
+                          second_x, second_y,
+                          width = self.second_hand_width,
+                          fill = self.second_color
+                        )
+    #}
+
+    def __draw_clock_numbers( self, time_: Time, radius_ ) -> None:
+    #{
         if ( not self.quarter_hour ):           ## If `quarter_hour` is False.
         #{
             for i in range( 1, time_.hours_per_day + 1 ):
@@ -269,42 +306,8 @@ class AnalogClock(tk.Canvas):
                 #}
             #}
         #}
-                        
-
-        # Drawing hour hand
-        hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
-        hour_x = radius_ + radius_ * 0.4 * math.sin( hour_angle )
-        hour_y = radius_ - radius_ * 0.4 * math.cos( hour_angle )
-        self.create_line(
-                          radius_, radius_,
-                          hour_x, hour_y,
-                          width = self.hour_hand_width,
-                          fill = self.hour_color
-                        )
-
-        # Drawing minute hand
-        minute_angle = math.radians( time_.minute * ( 360 / time_.minutes_per_hour ) )
-        minute_x = radius_ + radius_ * 0.6 * math.sin( minute_angle )
-        minute_y = radius_ - radius_ * 0.6 * math.cos( minute_angle )
-        self.create_line(
-                          radius_, radius_, 
-                          minute_x, minute_y,
-                          width = self.minute_hand_width,
-                          fill = self.minute_color
-                        )
-
-        # Drawing second hand
-        second_angle = math.radians( time_.second * ( 360 / self.time.seconds_per_minute ) )
-        second_x = radius_ + radius_ * 0.7 * math.sin( second_angle )
-        second_y = radius_ - radius_ * 0.7 * math.cos( second_angle )
-        self.create_line(
-                          radius_, radius_,
-                          second_x, second_y,
-                          width = self.second_hand_width,
-                          fill = self.second_color
-                        )
     #}
-        
+            
     def __draw_clock_shape( self ):
     #{
         # Drawing clock face with a slight padding to not touch the canvas border
