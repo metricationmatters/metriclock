@@ -269,6 +269,9 @@ class AnalogClock(tk.Canvas):
                           width = self.second_hand_width,
                           fill = self.second_color
                         )
+        
+        # Draw HH:MM:SS in text a center of screen.
+        self.create_text( radius_, radius_, text = str( self.time ), font = self.font, fill = self.font_color )
     #}
 
     def __draw_clock_numbers( self, total_numbers_: int, color_, length_, radius_ ) -> None:
