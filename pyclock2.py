@@ -73,11 +73,11 @@ class AnalogClock(tk.Canvas):
         self.last_update_time = datetime.now()
 
         # Handling the `fg_color = "transparent"` argument
-        if fg_color.lower() == 'transparent':
+        if ( fg_color.lower() == 'transparent' ):
         #{
             try:
             #{
-                if master.winfo_name().startswith("!ctkframe"):
+                if ( master.winfo_name().startswith("!ctkframe") ):
                 #{
                     # getting bg_color of customtkinter frames
                     self.fg_color = master._apply_appearance_mode(master.cget("fg_color"))
@@ -194,14 +194,14 @@ class AnalogClock(tk.Canvas):
             #{
                 x, y = self.__coordinate_clock_numbers(i)
                     
-                if i % 3 == 0:                   ## Writing Only 3, 6, 9, 12
+                if ( i % 3 == 0 ):                   ## Writing Only 3, 6, 9, 12
                 #{
                     self.__assign_clock_face_style(i, x, y)
                     # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
                 #}
                 else:                            ## Drawing Symbols on place of numbers not divisible by `3`
                 #{
-                    if self.quarter_symbol_color:   ## Using given color for symbols, If `quarter_symbol_color` is given
+                    if ( self.quarter_symbol_color ):   ## Using given color for symbols, If `quarter_symbol_color` is given
                     #{
                         self.create_text(x, y, text=self.quarter_symbol, font=self.font, fill=self.quarter_symbol_color)
                     #}
@@ -257,7 +257,7 @@ class AnalogClock(tk.Canvas):
             self.create_oval(padding, padding, 2 * (self.radius - padding), 2 * (self.radius - padding),
                             width=self.border_width, fill=self.fg_color, outline=self.border_color)
         #}
-        elif self.shape == 'rectangle':
+        elif ( self.shape == 'rectangle' ):
         #{
             side_length = 2 * (self.radius - padding)
             self.create_rectangle(padding, padding, padding + side_length, padding + side_length,
@@ -282,32 +282,32 @@ class AnalogClock(tk.Canvas):
         #}
 
         angle = math.radians(i * 30)
-        if i == 2 or i == 4:
+        if ( i == 2 or i == 4 ):
         #{
             x = self.radius + self.radius * 0.8 * math.sin(angle) + x_adjust
             y = self.radius - self.radius * 0.8 * math.cos(angle)
         #}
-        elif i == 5:
+        elif ( i == 5 ):
         #{
             x = self.radius + self.radius * 0.8 * math.sin(angle) + 4
             y = self.radius - self.radius * 0.8 * math.cos(angle) + y_adjust
         #}
-        elif i == 7:
+        elif ( i == 7 ):
         #{
             x = self.radius + self.radius * 0.8 * math.sin(angle) - 4
             y = self.radius - self.radius * 0.8 * math.cos(angle) + y_adjust
         #}
-        elif i == 8 or i == 10:
+        elif ( i == 8 or i == 10 ):
         #{
             x = self.radius + self.radius * 0.8 * math.sin(angle) - x_adjust
             y = self.radius - self.radius * 0.8 * math.cos(angle)
         #}
-        elif i == 11:
+        elif ( i == 11 ):
         #{
             x = self.radius + self.radius * 0.8 * math.sin(angle) - 4
             y = self.radius - self.radius * 0.8 * math.cos(angle) - y_adjust
         #}
-        elif i == 1:
+        elif ( i == 1 ):
         #{
             x = self.radius + self.radius * 0.8 * math.sin(angle) + 4
             y = self.radius - self.radius * 0.8 * math.cos(angle) - y_adjust
@@ -328,20 +328,20 @@ class AnalogClock(tk.Canvas):
                         7: 'VII', 8: 'VIII', 9: 'IX', 10: 'X', 11: 'XI', 12: 'XII'}
         TICKS = {1: '', 2: '', 3: '―', 4: '', 5: '', 6: '|', 7: '', 8: '', 9: '―', 10: '', 11: '', 12: '|'}
         EMPTY = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: '', 11: '', 12: ''}
-        if self.clock_face_style == 'digit' or self.clock_face_style == 'DIGIT' or self.clock_face_style == 'Digit':
+        if ( self.clock_face_style == 'digit' or self.clock_face_style == 'DIGIT' or self.clock_face_style == 'Digit' ):
         #{
             self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}
             
-        elif self.clock_face_style == 'roman' or self.clock_face_style == 'ROMAN' or self.clock_face_style == 'Roman':
+        elif ( self.clock_face_style == 'roman' or self.clock_face_style == 'ROMAN' or self.clock_face_style == 'Roman' ):
         #{
             self.create_text(x, y, text=ROMAN_NUMERALS[i], font=self.font, fill=self.font_color)
         #}
-        elif self.clock_face_style == 'tick' or self.clock_face_style == 'TICK' or self.clock_face_style == 'Tick':
+        elif ( self.clock_face_style == 'tick' or self.clock_face_style == 'TICK' or self.clock_face_style == 'Tick' ):
         #{
             self.create_text(x, y, text=TICKS[i], font=self.font, fill=self.font_color)
         #}
-        elif self.clock_face_style == None or self.clock_face_style == 'none' or self.clock_face_style == 'None' or self.clock_face_style == 'NONE':
+        elif ( self.clock_face_style == None or self.clock_face_style == 'none' or self.clock_face_style == 'None' or self.clock_face_style == 'NONE' ):
         #{
             self.create_text(x, y, text=EMPTY[i], font=self.font, fill=self.font_color)
         #}
