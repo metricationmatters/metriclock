@@ -64,7 +64,7 @@ class AnalogClock(tk.Canvas):
         frame,
         clock_title: str,
         time: Time,
-        radius: int = 150,
+        radius: int = 160,
         border_width: int = 3,
         border_color: str = '#ffffff',
         clock_face_style: str = 'digit', # Options: 'digit or 'tick' or 'none'
@@ -230,8 +230,8 @@ class AnalogClock(tk.Canvas):
         self.__draw_clock_shape( )
        
         # Drawing clock numbers
-        self.__draw_clock_numbers( self.time.hours_per_day,    self.hour_color,   radius_, radius_ ) # Hours
-        #self.__draw_clock_numbers( self.time.minutes_per_hour, self.minute_color, radius_, radius_ * 0.8 ) # minutes
+        self.__draw_clock_numbers( self.time.hours_per_day,    self.hour_color,   radius_, radius_ * 1.0 ) # Hours
+        self.__draw_clock_numbers( self.time.minutes_per_hour, self.minute_color, radius_, radius_ * 1.1 ) # minutes
 
         # Drawing hour hand
         hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
