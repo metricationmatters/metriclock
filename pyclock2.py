@@ -186,7 +186,6 @@ class AnalogClock(tk.Canvas):
         # Updating the last update time for the next cycle
         self.last_update_time = now
 
-            
         total_seconds = self.base_time.hour * ( 60 * 60 ) + \
                         self.base_time.minute * ( 60 ) + \
                         self.base_time.second
@@ -195,7 +194,7 @@ class AnalogClock(tk.Canvas):
 
         self.time.SetSeconds( total_seconds )
 
-        print( f"{self.clock_title}: {self.time.hour}:{self.time.minute}:{self.time.second} -> Seconds={total_seconds} -> {percent_time:.5f}" )
+        print( f"{self.clock_title}:  -> {self.time.hours_per_day}:{self.time.minutes_per_hour}:{self.time.seconds_per_minute} -> {self.time.hour}:{self.time.minute}:{self.time.second} -> Seconds={total_seconds} -> {percent_time:.5f}" )
 
         self.__draw_clock( self.time )
         self.after( 1000, self.__update_clock )
