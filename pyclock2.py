@@ -9,9 +9,9 @@ from typing import Optional, Tuple
 class Time:
 #{
     def __init__( self,
-                  hour  : int,
-                  minute: int,
-                  second: int,
+                  hour  : int = 0,
+                  minute: int = 0,
+                  second: int = 0,
                   hours_per_day     : tuple[ int, float ] = 24,
                   minutes_per_hour  : tuple[ int, float ] = 60,
                   seconds_per_minute: tuple[ int, float ] = 60 ) -> None:
@@ -29,6 +29,13 @@ class Time:
 
         assert self.seconds_per_day == 86400
     #}
+
+    def SetSeconds( self, seconds_: int ) -> None:
+    #{
+        self.hour   = int( seconds_ / self.seconds_per_hour )
+        self.minute = int( ( seconds_ - self.seconds_per_hour * self.hour ) / self.seconds_per_minute )
+        self.second = seconds_ - self.seconds_per_hour * self.hour - self.seconds_per_minute * self.minute
+    #}
 #}
 
 class AnalogClock(tk.Canvas):
@@ -38,9 +45,8 @@ class AnalogClock(tk.Canvas):
     def __init__(
         self,
         frame,
-        hours_per_day: int = 24,
-        minutes_per_hour: int = 60,
-        seconds_per_minute: int = 60,
+        clock_title: str,
+        time: Time,
         radius: int = 150,
         border_width: int = 3,
         border_color: str = '#ffffff',
@@ -69,9 +75,8 @@ class AnalogClock(tk.Canvas):
     #{
         ###  Parameter variables
         self.frame = frame
-        self.hours_per_day = hours_per_day
-        self.minutes_per_hour = minutes_per_hour
-        self.seconds_per_minute = seconds_per_minute
+        self.clock_title = clock_title
+        self.time = time
         self.radius = radius
         self.border_width = border_width
         self.border_color = border_color
@@ -181,32 +186,22 @@ class AnalogClock(tk.Canvas):
         # Updating the last update time for the next cycle
         self.last_update_time = now
 
-        legacy = Time( 0, 0, 0 )
-        normal = Time( 0, 0, 0 )
-        metric = Time( 0, 0, 0 )
+            
+        total_seconds = self.base_time.hour * ( 60 * 60 ) + \
+                        self.base_time.minute * ( 60 ) + \
+                        self.base_time.second
 
-        legacy.second = self.base_time.second
-        legacy.minute = self.base_time.minute
-        legacy.hour   = self.base_time.hour
-        
-        total_seconds = legacy.hour * (legacy.seconds_per_minute * legacy.minutes_per_hour ) + \
-                        legacy.minute * ( legacy.seconds_per_minute ) + \
-                        legacy.second
+        percent_time = total_seconds / self.time.seconds_per_day
 
-        percent_time = total_seconds / legacy.seconds_per_day
+        self.time.SetSeconds( total_seconds )
 
-        normal.hour   = int( total_seconds / normal.seconds_per_hour )
-        normal.minute = int( ( total_seconds - normal.seconds_per_hour * normal.hour ) / normal.seconds_per_minute )
-        normal.second = total_seconds - normal.seconds_per_hour * normal.hour - normal.seconds_per_minute * normal.minute
+        print( f"{self.clock_title}: {self.time.hour}:{self.time.minute}:{self.time.second} -> Seconds={total_seconds} -> {percent_time:.5f}" )
 
-
-        print( f"Legacy {legacy.hour}:{legacy.minute}:{legacy.second} -> TotalSeconds={total_seconds} -> {percent_time:.5f}" )
-
-        self.__draw_clock( legacy.second, legacy.minute, legacy.hour )
+        self.__draw_clock( self.time )
         self.after( 1000, self.__update_clock )
     #}
 
-    def __draw_clock( self, seconds, minutes, hours ):
+    def __draw_clock( self, time_: Time ) -> None:
     #{
         """
         Draw a clock on the canvas based on the given seconds, minutes, and hours.
@@ -222,21 +217,21 @@ class AnalogClock(tk.Canvas):
         # Drawing clock numbers
         if ( not self.quarter_hour ):           ## If `quarter_hour` is False.
         #{
-            for i in range( 1, self.hours_per_day + 1 ):
+            for i in range( 1, time_.hours_per_day + 1 ):
                 x, y = self.__coordinate_clock_numbers( i )
                 self.__assign_clock_face_style( i, x, y )
                 # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}
         elif ( self.quarter_hour and not self.quarter_symbol ): ## If `quarter_hour` is True and `quarter_symbol` is False.
         #{
-            for i in range( 3, self.hours_per_day + 1, 3 ):                             ## Only for 3, 6, 9, 12
+            for i in range( 3, time_.hours_per_day + 1, 3 ):                             ## Only for 3, 6, 9, 12
                 x, y = self.__coordinate_clock_numbers( i )
                 self.__assign_clock_face_style( i, x, y )
                 # self.create_text(x, y, text=str(i), font=self.font, fill=self.font_color)
         #}                
         elif ( self.quarter_hour and self.quarter_symbol ):         ## If `quarter_hour` is True and `quarter_symbol` is True.
         #{
-            for i in range( 1, self.hours_per_day + 1 ):                              ## For all numbers
+            for i in range( 1, self.time.hours_per_day + 1 ):                              ## For all numbers
             #{
                 x, y = self.__coordinate_clock_numbers( i )
                     
@@ -261,7 +256,7 @@ class AnalogClock(tk.Canvas):
                         
 
         # Drawing hour hand
-        hour_angle = math.radians( hours * ( 360 / self.hours_per_day ) )
+        hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
         hour_x = self.radius + self.radius * 0.4 * math.sin( hour_angle )
         hour_y = self.radius - self.radius * 0.4 * math.cos( hour_angle )
         self.create_line(
@@ -272,7 +267,7 @@ class AnalogClock(tk.Canvas):
                         )
 
         # Drawing minute hand
-        minute_angle = math.radians( minutes * ( 360 / self.minutes_per_hour ) )
+        minute_angle = math.radians( time_.minute * ( 360 / time_.minutes_per_hour ) )
         minute_x = self.radius + self.radius * 0.6 * math.sin( minute_angle )
         minute_y = self.radius - self.radius * 0.6 * math.cos( minute_angle )
         self.create_line(
@@ -283,7 +278,7 @@ class AnalogClock(tk.Canvas):
                         )
 
         # Drawing second hand
-        second_angle = math.radians( seconds * ( 360 / self.seconds_per_minute ) )
+        second_angle = math.radians( time_.second * ( 360 / self.time.seconds_per_minute ) )
         second_x = self.radius + self.radius * 0.7 * math.sin( second_angle )
         second_y = self.radius - self.radius * 0.7 * math.cos( second_angle )
         self.create_line(
@@ -305,7 +300,7 @@ class AnalogClock(tk.Canvas):
     def __coordinate_clock_numbers( self, i ):
     #{
         # Getting Coordinates for clock numbers
-        angle = math.radians( i * ( 360 / self.hours_per_day ) )
+        angle = math.radians( i * ( 360 / self.time.hours_per_day ) )
         x = self.radius + self.radius * 0.8 * math.sin( angle )
         y = self.radius - self.radius * 0.8 * math.cos( angle )
             
@@ -484,8 +479,13 @@ if ( __name__ == "__main__" ):
     frame = tk.Tk( )
     frame.title( 'Analog Clock' )
 
-    clock = AnalogClock( frame, radius = 150 )
-    clock.pack( )
+    legacy_clock = Time( )
+    clock1 = AnalogClock( frame, "Legacy", legacy_clock )
+    clock1.pack( )
+
+    metric_clock = Time( hours_per_day = 100, minutes_per_hour = 9, seconds_per_minute = 96 )
+    clock2 = AnalogClock( frame, "Metric", metric_clock, radius = 330 )
+    clock2.pack( )
 
     frame.mainloop( )
 #}
