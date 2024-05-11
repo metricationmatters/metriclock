@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# Analog Clock
+
 import tkinter as tk
 import math
 from datetime import datetime
@@ -372,3 +375,14 @@ class AnalogClock(tk.Canvas):
         # Update the clock appearance
         self.__update_clock()
 
+
+if ( __name__ == "__main__" ):
+#{
+    frame = tk.Tk( )
+    frame.title('Analog Clock')
+
+    clock = AnalogClock( frame, radius = 150, )
+    clock.pack()
+
+    frame.mainloop()
+#}
