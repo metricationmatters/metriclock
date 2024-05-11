@@ -2,10 +2,13 @@
 # Analog Clock
 # Based on https://github.com/Arthur-101/CTkClock/tree/main
 
-import tkinter as tk
-import math
 from datetime import datetime
+import math
+import string
+import sys
 from typing import Optional, Tuple
+
+import tkinter as tk
 
 class Time:
 #{
@@ -489,6 +492,22 @@ class AnalogClock(tk.Canvas):
 ########
 if ( __name__ == "__main__" ):
 #{
+    # Default metric values:
+
+    metric_hours_per_day = 100
+    metric_minutes_per_hour = 100
+    metric_seconds_per_minute = 100
+
+    if ( len( sys.argv ) > 1 ):
+    #{
+       metric_hours_per_day, metric_minutes_per_hour, metric_seconds_per_minute = str.split( sys.argv[ 1 ], ":" )
+       metric_hours_per_day = int( metric_hours_per_day )
+       metric_minutes_per_hour = int( metric_minutes_per_hour )
+       metric_seconds_per_minute = int( metric_seconds_per_minute )
+    #}
+
+    metric_seconds_per_day = metric_hours_per_day * metric_minutes_per_hour * metric_seconds_per_minute
+
     frame = tk.Tk( )
     frame.title( 'Analog Clock' )
 
@@ -496,8 +515,12 @@ if ( __name__ == "__main__" ):
     clock1 = AnalogClock( frame, "Legacy", legacy_clock )
     clock1.pack( )
 
+    metric_clock = Time( seconds_per_day = metric_seconds_per_day,
+                         hours_per_day = metric_hours_per_day,
+                         minutes_per_hour = metric_minutes_per_hour,
+                         seconds_per_minute = metric_minutes_per_hour )
+    
     # Radius 320 is good for clock face of 100 numbers.
-    metric_clock = Time(  seconds_per_day = 1000000, hours_per_day = 100, minutes_per_hour = 100, seconds_per_minute = 100 )
     clock2 = AnalogClock( frame, "Metric", metric_clock, radius = 320 )
     clock2.pack( )
 
