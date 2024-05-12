@@ -273,9 +273,10 @@ class AnalogClock(tk.Canvas):
                           fill = self.second_color
                         )
         
-        # Draw HH:MM:SS in text a center of screen.        
+        # Draw text information in the center of screen.
+        total = "Total: " + self.time.MaxHoursMinutesSeconds( ) + " -> " + str( self.time.seconds_per_day )
         self.create_text( radius_, radius_ - 20, text = self.clock_title, font = self.font, fill = self.font_color )
-        self.create_text( radius_, radius_ - 10, text = str( self.time.MaxHoursMinutesSeconds( ) ), font = self.font, fill = self.font_color )
+        self.create_text( radius_, radius_ - 10, text = total, font = self.font, fill = self.font_color )
         self.create_text( radius_, radius_,      text = str( self.time ), font = self.font, fill = self.font_color )
 
         percent_time = self.time.total_seconds / self.time.seconds_per_day
