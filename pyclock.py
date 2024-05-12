@@ -237,8 +237,18 @@ class AnalogClock(tk.Canvas):
        
         # Drawing clock numbers
         self.__draw_clock_numbers( self.time.hours_per_day,      self.hour_color,   radius_, radius_ * 0.9 ) # Hours
-        self.__draw_clock_numbers( self.time.minutes_per_hour,   self.minute_color, radius_, radius_ * 1.0 ) # minutes
-        self.__draw_clock_numbers( self.time.seconds_per_minute, self.second_color, radius_, radius_ * 1.1 ) # second
+
+        # Only draw minute numbers if they are in range of 2 - 100.
+        if ( self.time.minutes_per_hour >= 2 and self.time.minutes_per_hour <= 100 ):
+        #{
+            self.__draw_clock_numbers( self.time.minutes_per_hour,   self.minute_color, radius_, radius_ * 1.0 ) # minutes
+        #}
+
+        # Only draw second numbers if they are in range of 2 - 100.
+        if ( self.time.seconds_per_minute >= 2 and self.time.seconds_per_minute <= 100 ):
+        #{
+            self.__draw_clock_numbers( self.time.seconds_per_minute, self.second_color, radius_, radius_ * 1.1 ) # second
+        #}
 
         # Drawing hour hand
         hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
@@ -265,15 +275,20 @@ class AnalogClock(tk.Canvas):
         # Drawing second hand
         # FIXME??? Draw only integer second, which creates jumps and looks wierd but helps tell 
         # what "second" on the dial was pointed to.
-        second_angle = math.radians( int( time_.second ) * ( 360 / self.time.seconds_per_minute ) )
-        second_x = radius_ + radius_ * 1.1 * 0.8 * math.sin( second_angle )
-        second_y = radius_ - radius_ * 1.1 * 0.8 * math.cos( second_angle )
-        self.create_line(
-                          radius_, radius_,
-                          second_x, second_y,
-                          width = self.second_hand_width,
-                          fill = self.second_color
-                        )
+
+        # Only draw second hand if seconds_per_minute != 1. This allows us to not have seconds_per_minute.
+        if ( self.time.seconds_per_minute != 1 ):
+        #{
+            second_angle = math.radians( int( time_.second ) * ( 360 / self.time.seconds_per_minute ) )
+            second_x = radius_ + radius_ * 1.1 * 0.8 * math.sin( second_angle )
+            second_y = radius_ - radius_ * 1.1 * 0.8 * math.cos( second_angle )
+            self.create_line(
+                            radius_, radius_,
+                            second_x, second_y,
+                            width = self.second_hand_width,
+                            fill = self.second_color
+                            )
+        #}
         
         # Draw text information in the center of screen.
         total = "Total: " + self.time.MaxHoursMinutesSeconds( ) + " -> " + str( self.time.seconds_per_day )
@@ -523,10 +538,26 @@ if ( __name__ == "__main__" ):
 
     if ( len( sys.argv ) > 1 ):
     #{
-       set_hours_per_day, set_minutes_per_hour, set_seconds_per_minute = str.split( sys.argv[ 1 ], ":" )
-       metric_hours_per_day = int( set_hours_per_day )
-       metric_minutes_per_hour = int( set_minutes_per_hour )
-       metric_seconds_per_minute = int( set_seconds_per_minute )
+        metric_hours_per_day      = 1
+        metric_minutes_per_hour   = 1
+        metric_seconds_per_minute = 1
+
+        time_array = str.split( sys.argv[ 1 ], ":" )
+
+        if ( len( time_array ) >= 1 ):
+        #{
+            metric_hours_per_day = int( time_array[ 0 ] )
+        #}
+
+        if ( len( time_array ) >= 2 ):
+        #{
+            metric_minutes_per_hour = int( time_array[ 1 ] )
+        #}
+
+        if ( len( time_array ) >= 3 ):
+        #{
+            metric_seconds_per_minute = int( time_array[ 2 ] )
+        #}
     #}
 
     metric_second_per_day = metric_hours_per_day * metric_minutes_per_hour * metric_seconds_per_minute
