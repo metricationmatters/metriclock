@@ -58,9 +58,9 @@ class Time:
 
     def MaxHoursMinutesSeconds( self ) -> str:
     #{
-        max_size: int = max( self.hours_per_day - 1, self.minutes_per_hour - 1, self.seconds_per_minute - 1 )
+        max_size: int = max( self.hours_per_day, self.minutes_per_hour, self.seconds_per_minute )
         s = len( str( max_size ) )
-        sform = "{hour:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}"
+        sform = "{hour:>0" + str( s ) + "d}:{minute:>0" + str( s ) + "d}:{second:>0" + str( s ) + "d}"
         return str.format( sform, hour = self.hours_per_day, minute = self.minutes_per_hour, second = self.seconds_per_minute )
     #}
 #}
