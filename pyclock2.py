@@ -263,7 +263,9 @@ class AnalogClock(tk.Canvas):
                         )
 
         # Drawing second hand
-        second_angle = math.radians( time_.second * ( 360 / self.time.seconds_per_minute ) )
+        # FIXME??? Draw only integer second, which creates jumps and looks wierd but helps tell 
+        # what "second" on the dial was pointed to.
+        second_angle = math.radians( int( time_.second ) * ( 360 / self.time.seconds_per_minute ) )
         second_x = radius_ + radius_ * 1.1 * 0.8 * math.sin( second_angle )
         second_y = radius_ - radius_ * 1.1 * 0.8 * math.cos( second_angle )
         self.create_line(
