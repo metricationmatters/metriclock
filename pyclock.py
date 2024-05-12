@@ -233,7 +233,13 @@ class AnalogClock(tk.Canvas):
         """
         self.delete( "all" )
 
-        self.__draw_clock_shape( )
+        self.__draw_clock_shape( self.fg_color, self.border_color, radius_ )
+
+        ## If minutes_per_hour outside range of 2 - 100 then just draw circle.
+        #if ( self.time.minutes_per_hour < 2 or self.time.minutes_per_hour > 100 ):
+        ##{
+        #    self.__draw_clock_shape( None, self.minute_color, radius_ * 1.0 * 0.8 )
+        ##}
        
         # Drawing clock numbers
         self.__draw_clock_numbers( self.time.hours_per_day,      self.hour_color,   radius_, radius_ * 0.9 ) # Hours
@@ -241,7 +247,7 @@ class AnalogClock(tk.Canvas):
         # Only draw minute numbers if they are in range of 2 - 100.
         if ( self.time.minutes_per_hour >= 2 and self.time.minutes_per_hour <= 100 ):
         #{
-            self.__draw_clock_numbers( self.time.minutes_per_hour,   self.minute_color, radius_, radius_ * 1.0 ) # minutes
+            self.__draw_clock_numbers( self.time.minutes_per_hour, self.minute_color, radius_, radius_ * 1.0 ) # minutes
         #}
 
         # Only draw second numbers if they are in range of 2 - 100.
@@ -344,12 +350,21 @@ class AnalogClock(tk.Canvas):
         #}
     #}
             
-    def __draw_clock_shape( self ):
+    def __draw_clock_shape( self, fill_color_, outline_color_, radius_ ):
     #{
         # Drawing clock face with a slight padding to not touch the canvas border
         padding = 5
-        self.create_oval( padding, padding, 2 * ( self.radius - padding ), 2 * ( self.radius - padding ),
-                          width = self.border_width, fill = self.fg_color, outline = self.border_color )
+
+        if ( fill_color_ == None ):
+        #{
+            self.create_oval( padding, padding, 2 * ( radius_ - padding ), 2 * ( radius_ - padding ),
+                              width = self.border_width, outline = outline_color_ )
+        #}
+        else:
+        #{
+            self.create_oval( padding, padding, 2 * ( radius_ - padding ), 2 * ( radius_ - padding ),
+                              width = self.border_width, fill = fill_color_, outline = outline_color_ )
+        #}
     #}
 
     def __coordinate_clock_numbers( self, i, length_, radius_, total_number_ ):
