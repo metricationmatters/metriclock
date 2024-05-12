@@ -242,8 +242,8 @@ class AnalogClock(tk.Canvas):
 
         # Drawing hour hand
         hour_angle = math.radians( time_.hour * ( 360 / time_.hours_per_day ) )
-        hour_x = radius_ + radius_ * 0.4 * math.sin( hour_angle )
-        hour_y = radius_ - radius_ * 0.4 * math.cos( hour_angle )
+        hour_x = radius_ + radius_ * 0.9 * 0.8 * math.sin( hour_angle )
+        hour_y = radius_ - radius_ * 0.9 * 0.8 * math.cos( hour_angle )
         self.create_line(
                           radius_, radius_,
                           hour_x, hour_y,
@@ -253,8 +253,8 @@ class AnalogClock(tk.Canvas):
 
         # Drawing minute hand
         minute_angle = math.radians( time_.minute * ( 360 / time_.minutes_per_hour ) )
-        minute_x = radius_ + radius_ * 0.6 * math.sin( minute_angle )
-        minute_y = radius_ - radius_ * 0.6 * math.cos( minute_angle )
+        minute_x = radius_ + radius_ * 1.0 * 0.8 * math.sin( minute_angle )
+        minute_y = radius_ - radius_ * 1.0 * 0.8 * math.cos( minute_angle )
         self.create_line(
                           radius_, radius_, 
                           minute_x, minute_y,
@@ -264,8 +264,8 @@ class AnalogClock(tk.Canvas):
 
         # Drawing second hand
         second_angle = math.radians( time_.second * ( 360 / self.time.seconds_per_minute ) )
-        second_x = radius_ + radius_ * 0.7 * math.sin( second_angle )
-        second_y = radius_ - radius_ * 0.7 * math.cos( second_angle )
+        second_x = radius_ + radius_ * 1.1 * 0.8 * math.sin( second_angle )
+        second_y = radius_ - radius_ * 1.1 * 0.8 * math.cos( second_angle )
         self.create_line(
                           radius_, radius_,
                           second_x, second_y,
