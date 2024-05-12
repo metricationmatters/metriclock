@@ -10,6 +10,16 @@ from typing import Optional, Tuple
 
 import tkinter as tk
 
+# Define new "_create_circle" method.
+def _create_circle( self, x_, y_, r_, **kwargs_ ):
+#{
+    return self.create_oval( x_ - r_, y_ - r_, x_ + r_, y_ + r_, **kwargs_ )
+#}
+
+# Patch tkinter to allow new "create_circle" command.
+tk.Canvas.create_circle = _create_circle
+
+
 class Time:
 #{
     def __init__( self,
@@ -233,13 +243,21 @@ class AnalogClock(tk.Canvas):
         """
         self.delete( "all" )
 
-        self.__draw_clock_shape( self.fg_color, self.border_color, radius_ )
+        self.__draw_clock_shape( radius_,
+                                 radius_,
+                                 radius_,
+                                 self.fg_color,
+                                 self.border_color )
 
-        ## If minutes_per_hour outside range of 2 - 100 then just draw circle.
-        #if ( self.time.minutes_per_hour < 2 or self.time.minutes_per_hour > 100 ):
-        ##{
-        #    self.__draw_clock_shape( None, self.minute_color, radius_ * 1.0 * 0.8 )
-        ##}
+        # If minutes_per_hour outside range of 2 - 100 then just draw circle.
+        if ( self.time.minutes_per_hour < 2 or self.time.minutes_per_hour > 100 ):
+        #{
+            self.__draw_clock_shape( radius_,
+                                     radius_,
+                                     radius_ * 1.0 * 0.8,
+                                     None,
+                                     self.minute_color )
+        #}
        
         # Drawing clock numbers
         self.__draw_clock_numbers( self.time.hours_per_day,      self.hour_color,   radius_, radius_ * 0.9 ) # Hours
@@ -350,20 +368,20 @@ class AnalogClock(tk.Canvas):
         #}
     #}
             
-    def __draw_clock_shape( self, fill_color_, outline_color_, radius_ ):
+    def __draw_clock_shape( self, x_, y_, radius_, fill_color_, outline_color_ ):
     #{
         # Drawing clock face with a slight padding to not touch the canvas border
         padding = 5
 
         if ( fill_color_ == None ):
         #{
-            self.create_oval( padding, padding, 2 * ( radius_ - padding ), 2 * ( radius_ - padding ),
-                              width = self.border_width, outline = outline_color_ )
+            self.create_circle( x_, y_, radius_,
+                                width = self.border_width, outline = outline_color_ )
         #}
         else:
         #{
-            self.create_oval( padding, padding, 2 * ( radius_ - padding ), 2 * ( radius_ - padding ),
-                              width = self.border_width, fill = fill_color_, outline = outline_color_ )
+            self.create_circle( x_ + padding, y_ + padding, 2 * ( radius_ - padding ),
+                                width = self.border_width, fill = fill_color_, outline = outline_color_ )
         #}
     #}
 
@@ -548,8 +566,8 @@ if ( __name__ == "__main__" ):
 #{
     # Default metric values:
     metric_hours_per_day = 100
-    metric_minutes_per_hour = 100
-    metric_seconds_per_minute = 100
+    metric_minutes_per_hour = 864
+    metric_seconds_per_minute = 1
 
     if ( len( sys.argv ) > 1 ):
     #{
