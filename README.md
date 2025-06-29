@@ -31,3 +31,27 @@ day with 864 minutes per hour and 1 second per minute.
 
 Please feel free to suggest improvements or suggest changes as GitHub issues.
 
+
+INSTALL
+=======
+
+Linux:
+======
+
+TBD - Works but I haven't yet documented how to set it up.
+
+Mac:
+====
+
+1. install the HomeBrew package management system:
+
+   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+2. install the python-tk package.
+
+   brew install python-tk
+
+Windows:
+========
+
+TBD - Works but I haven't yet documented how to set it up.
